@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BS-LasftFm-Scrobbler", "BS-LasftFm-Scrobbler\BS-LasftFm-Scrobbler.csproj", "{CB6AC368-85D9-4294-A4C7-283106B67F34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BS-LastFm-Scrobbler", "BS-LastFm-Scrobbler\BS-LastFm-Scrobbler.csproj", "{CB6AC368-85D9-4294-A4C7-283106B67F34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

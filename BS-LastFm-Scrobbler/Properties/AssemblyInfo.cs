@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("BS-LasftFm-Scrobbler")]
+[assembly: AssemblyTitle("BS-LastFm-Scrobbler")]
 [assembly: AssemblyDescription("Lastf scrobbler for Beat Saber")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BS-LasftFm-Scrobbler")]
+[assembly: AssemblyProduct("BS-LastFm-Scrobbler")]
 [assembly: AssemblyCopyright("Copyright © Ifropc 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
