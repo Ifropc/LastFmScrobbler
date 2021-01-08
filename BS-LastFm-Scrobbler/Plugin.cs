@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using BS_LastFm_Scrobbler.Components;
 using BS_LastFm_Scrobbler.Installers;
 using BS_LastFm_Scrobbler.Managers;
+using BS_LastFm_Scrobbler.Patches;
+using HarmonyLib;
 using IPA;
 using IPA.Config.Stores;
 using IPAConfig = IPA.Config.Config;
@@ -16,49 +19,52 @@ namespace BS_LastFm_Scrobbler
     [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin
     {
+        private const string HarmonyID = "com.github.ifropc.BSLastFmScrobbler";
+        private readonly IPA.Logging.Logger _log;
+        private readonly Harmony _harmony;
+
         [Init]
         public Plugin(IPAConfig cfg, IPA.Logging.Logger log, Zenjector injector, PluginMetadata metadata)
         {
-            // var config = cfg.Generated<Config>();
-            // config.Version = metadata.Version;
+            _log = log;
+            _harmony = new Harmony(HarmonyID);
+            HarmonyLog.Log = log;
 
             injector.On<PCAppInit>().Pseudo(container =>
             {
                 log?.Debug("On app init");
                 container.BindLoggerAsSiraLogger(log);
-                // container.BindInstance(config).AsSingle();
             });
 
-         //   injector.OnMenu<GameInstaller>();
-
-            injector
-                .On<MenuInstaller>()
-                .Pseudo((ctx, Container) =>
-                {
-                    var resolved = Container.Resolve<MenuTransitionsHelper>();
-                    var upgraded = resolved.Upgrade<MenuTransitionsHelper, MyMenuTransitionHelper>();
-          
-                    Container.QueueForInject(upgraded);
-                    Container.Unbind<MenuTransitionsHelper>();
-                    Container.Bind(typeof(MenuTransitionsHelper), typeof(MyMenuTransitionHelper)).To<MyMenuTransitionHelper>().FromInstance(upgraded).AsSingle();
-            
-                    Container.BindInterfacesAndSelfTo<GameManager>().AsSingle();
-                });
-
+            injector.OnMenu<GameInstaller>();
         }
 
-        // TODO
 
         #region Disableable
-
         [OnEnable]
         public void OnEnable()
         {
+            try
+            {
+                _harmony.PatchAll();
+            }
+            catch (Exception e)
+            {
+                _log.Critical(e);
+            }
         }
 
         [OnDisable]
         public void OnDisable()
         {
+            try
+            {
+                _harmony.UnpatchAll(HarmonyID);
+            }
+            catch (Exception e)
+            {
+                _log.Critical(e);
+            }
         }
 
         #endregion

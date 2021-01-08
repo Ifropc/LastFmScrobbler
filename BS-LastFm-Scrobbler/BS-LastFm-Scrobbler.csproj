@@ -41,6 +41,9 @@
     <DisableZipRelease>True</DisableZipRelease>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony, Version=2.0.2.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>E:\Steam\steamapps\common\Beat Saber\Libs\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="BSML, Version=1.4.2.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>E:\Steam\steamapps\common\Beat Saber\Plugins\BSML.dll</HintPath>
     </Reference>
@@ -118,6 +121,9 @@
     <Compile Include="Config.cs" />
     <Compile Include="Installers\GameInstaller.cs" />
     <Compile Include="Managers\GameManager.cs" />
+    <Compile Include="Managers\SongManager.cs" />
+    <Compile Include="Patches\HarmonyLog.cs" />
+    <Compile Include="Patches\TransitionHelperPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
