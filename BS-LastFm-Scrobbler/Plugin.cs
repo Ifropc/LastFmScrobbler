@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Linq;
-using BS_LastFm_Scrobbler.Components;
-using BS_LastFm_Scrobbler.Installers;
-using BS_LastFm_Scrobbler.Managers;
-using BS_LastFm_Scrobbler.Patches;
 using HarmonyLib;
 using IPA;
-using IPA.Config.Stores;
-using IPAConfig = IPA.Config.Config;
-using IPA.Loader;
+using IPA.Logging;
 using SiraUtil;
 using SiraUtil.Zenject;
-using UnityEngine;
-using Zenject;
+using IPAConfig = IPA.Config.Config;
 
 namespace BS_LastFm_Scrobbler
 {
@@ -20,27 +12,26 @@ namespace BS_LastFm_Scrobbler
     public class Plugin
     {
         private const string HarmonyID = "com.github.ifropc.BSLastFmScrobbler";
-        private readonly IPA.Logging.Logger _log;
+
+        // TODO: remove if not used
         private readonly Harmony _harmony;
 
+        private readonly Logger _log;
+
         [Init]
-        public Plugin(IPAConfig cfg, IPA.Logging.Logger log, Zenjector injector, PluginMetadata metadata)
+        public Plugin(IPAConfig cfg, Logger log, Zenjector injector)
         {
             _log = log;
             _harmony = new Harmony(HarmonyID);
-            HarmonyLog.Log = log;
 
-            injector.On<PCAppInit>().Pseudo(container =>
-            {
-                log?.Debug("On app init");
-                container.BindLoggerAsSiraLogger(log);
-            });
+            injector.On<PCAppInit>().Pseudo(container => { container.BindLoggerAsSiraLogger(log); });
 
-            injector.OnMenu<GameInstaller>();
+            injector.OnMenu<Installers.MenuInstaller>().ShortCircuitForTutorial();
         }
 
 
         #region Disableable
+
         [OnEnable]
         public void OnEnable()
         {

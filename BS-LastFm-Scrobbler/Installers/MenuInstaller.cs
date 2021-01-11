@@ -1,24 +1,20 @@
 ﻿using BS_LastFm_Scrobbler.Components;
 using BS_LastFm_Scrobbler.Managers;
-using BS_LastFm_Scrobbler.Patches;
 using SiraUtil;
 using UnityEngine;
 using Zenject;
 
 namespace BS_LastFm_Scrobbler.Installers
 {
-    public class GameInstaller : Installer
+    public class MenuInstaller : Installer
     {
         public override void InstallBindings()
         {
-            Rebind<MenuTransitionsHelper, MyMenuTransitionHelper>();
+            Rebind<MenuTransitionsHelper, LastFmMenuTransitionHelper>();
 
-            // TODO: might be not necessary
-            Container.Bind<TransitionHelperPatch>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<SongManager>().AsSingle().NonLazy();
         }
 
-        // TODO: delete if unused
         private void Rebind<T, R>() where T : MonoBehaviour where R : T
         {
             var resolved = Container.Resolve<T>();

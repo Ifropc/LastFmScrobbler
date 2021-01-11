@@ -1,5 +1,5 @@
 ﻿using System;
-using BS_LastFm_Scrobbler.Patches;
+using BS_LastFm_Scrobbler.Components;
 using SiraUtil.Tools;
 using Zenject;
 
@@ -7,37 +7,50 @@ namespace BS_LastFm_Scrobbler.Managers
 {
     public class SongManager : IInitializable, IDisposable
     {
+        private Action<LevelCollectionViewController, IPreviewBeatmapLevel> _eventSelectedAction;
         [Inject] private LevelCollectionViewController _levelCollectionViewController;
         [Inject] private SiraLog _log;
+        [Inject] private MissionSelectionMapViewController _missionSelection;
+
 
         private IPreviewBeatmapLevel _selected;
-
-        public void Initialize()
-        {
-            _levelCollectionViewController.didSelectLevelEvent += OnEventSelected;
-            TransitionHelperPatch.LevelStarted += onLevelStarted;
-         
-        }
+        [Inject] private LastFmMenuTransitionHelper _transitionHelper;
 
         public void Dispose()
         {
-            _levelCollectionViewController.didSelectLevelEvent -= OnEventSelected;
+            _levelCollectionViewController.didSelectLevelEvent -= _eventSelectedAction;
         }
 
-        private void OnEventSelected(LevelCollectionViewController _, IPreviewBeatmapLevel beatmapPreview)
+        public void Initialize()
+        {
+            _eventSelectedAction = (_, x) => OnEventSelected(x);
+
+            _levelCollectionViewController.didSelectLevelEvent += _eventSelectedAction;
+            _missionSelection.didSelectMissionLevelEvent += OnMissionEventSelected;
+            _transitionHelper.SongSelectedEvent += OnEventSelected;
+            _transitionHelper.SongDidStartEvent += OnLevelStarted;
+            _transitionHelper.SongDidFinishEvent += OnLevelFinished;
+        }
+
+        private void OnEventSelected(IPreviewBeatmapLevel beatmapPreview)
         {
             _selected = beatmapPreview;
-            _log.Debug($"Selected {beatmapPreview.songAuthorName} : {beatmapPreview.songName}");
+            _log.Debug($"Selected {beatmapPreview.songAuthorName}:{beatmapPreview.songName}");
         }
 
-        private void onLevelStarted()
+        private void OnMissionEventSelected(MissionSelectionMapViewController c, MissionNode n)
         {
-            _log.Debug("Level started");
+            OnEventSelected(n.missionData.level);
         }
 
-        private void onLevelFinished(StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupDataSo, LevelCompletionResults levelCompletionResults)
+        private void OnLevelStarted(float offset)
         {
-            _log.Debug("Level finished");
+            _log.Debug($"Level started: {_selected.songName}:{_selected.songDuration}:{offset}");
+        }
+
+        private void OnLevelFinished(LevelCompletionResults results)
+        {
+            _log.Debug($"Level finished : {results.songDuration} : {results.endSongTime}");
         }
     }
 }

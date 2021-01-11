@@ -44,6 +44,12 @@
     <Reference Include="0Harmony, Version=2.0.2.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>E:\Steam\steamapps\common\Beat Saber\Libs\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="BeatmapCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>E:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
+    </Reference>
+    <Reference Include="BGNet, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>E:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\BGNet.dll</HintPath>
+    </Reference>
     <Reference Include="BSML, Version=1.4.2.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>E:\Steam\steamapps\common\Beat Saber\Plugins\BSML.dll</HintPath>
     </Reference>
@@ -117,13 +123,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\MyMenuTransitionHelper.cs" />
+    <Compile Include="Components\LastFmMenuTransitionHelper.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Installers\GameInstaller.cs" />
-    <Compile Include="Managers\GameManager.cs" />
+    <Compile Include="Installers\MenuInstaller.cs" />
     <Compile Include="Managers\SongManager.cs" />
-    <Compile Include="Patches\HarmonyLog.cs" />
-    <Compile Include="Patches\TransitionHelperPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -141,6 +144,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Patches" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
