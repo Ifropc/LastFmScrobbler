@@ -1,9 +1,9 @@
 ﻿using System;
-using BS_LastFm_Scrobbler.Components;
+using LastFmScrobbler.Components;
 using SiraUtil.Tools;
 using Zenject;
 
-namespace BS_LastFm_Scrobbler.Managers
+namespace LastFmScrobbler.Managers
 {
     public class SongManager : IInitializable, IDisposable
     {

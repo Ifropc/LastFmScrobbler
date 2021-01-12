@@ -1,6 +1,6 @@
 ﻿using SemVer;
 
-namespace BS_LastFm_Scrobbler
+namespace LastFmScrobbler
 {
     public class Config
     {

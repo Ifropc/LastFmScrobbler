@@ -6,7 +6,7 @@ using SiraUtil;
 using SiraUtil.Zenject;
 using IPAConfig = IPA.Config.Config;
 
-namespace BS_LastFm_Scrobbler
+namespace LastFmScrobbler
 {
     [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin

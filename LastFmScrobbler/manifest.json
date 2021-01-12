@@ -1,10 +1,10 @@
 ﻿{
   "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
-  "id": "BS_LastFm_Scrobbler",
-  "name": "BS-LastFm-Scrobbler",
+  "id": "LastFmScrobbler",
+  "name": "LastFmScrobbler",
   "author": "",
   "version": "0.0.1",
-  "description": "",
+  "description": "Allows to scrobble played songs from to Last Fm",
   "gameVersion": "1.11.1",
   "dependsOn": {
     "BSIPA": "^4.1.3",

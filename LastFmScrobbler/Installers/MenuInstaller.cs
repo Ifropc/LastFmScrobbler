@@ -1,10 +1,10 @@
-﻿using BS_LastFm_Scrobbler.Components;
-using BS_LastFm_Scrobbler.Managers;
+﻿using LastFmScrobbler.Components;
+using LastFmScrobbler.Managers;
 using SiraUtil;
 using UnityEngine;
 using Zenject;
 
-namespace BS_LastFm_Scrobbler.Installers
+namespace LastFmScrobbler.Installers
 {
     public class MenuInstaller : Installer
     {

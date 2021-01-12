@@ -7,7 +7,7 @@ using Zenject;
 using Object = System.Object;
 
 
-namespace BS_LastFm_Scrobbler.Components
+namespace LastFmScrobbler.Components
 {
     public class LastFmMenuTransitionHelper : MenuTransitionsHelper
     {

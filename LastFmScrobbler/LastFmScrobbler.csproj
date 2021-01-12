@@ -8,8 +8,8 @@
     <ProjectGuid>{CB6AC368-85D9-4294-A4C7-283106B67F34}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BS_LastFm_Scrobbler</RootNamespace>
-    <AssemblyName>BS-LastFm-Scrobbler</AssemblyName>
+    <RootNamespace>LastFmScrobbler</RootNamespace>
+    <AssemblyName>LastFmScrobbler</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <DebugSymbols>true</DebugSymbols>
@@ -136,7 +136,7 @@
   <ItemGroup>
     <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
-    <None Include="BS_LastFm_Scrobbler.csproj.user" Condition="Exists('BS_LastFm_Scrobbler.csproj.user')" />
+    <None Include="LastFmScrobbler.csproj.user" Condition="Exists('LastFmScrobbler.csproj.user')" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks">
