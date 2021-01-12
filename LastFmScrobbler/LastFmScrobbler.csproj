@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <Optimize>false</Optimize>
@@ -42,28 +43,41 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.0.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>E:\Steam\steamapps\common\Beat Saber\Libs\0Harmony.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="BeatmapCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>E:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="BGNet, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>E:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\BGNet.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGNet.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="BSML, Version=1.4.2.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>E:\Steam\steamapps\common\Beat Saber\Plugins\BSML.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Plugins\BSML.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Colors, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>E:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\Colors.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Colors.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="GameplayCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>E:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="SemVer, Version=1.2.2.0, Culture=neutral, PublicKeyToken=a89bb7dc6f7a145c">
-      <HintPath>E:\Steam\steamapps\common\Beat Saber\Libs\SemVer.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Libs\SemVer.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="SiraUtil, Version=2.3.1.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>E:\Steam\steamapps\common\Beat Saber\Plugins\SiraUtil.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Plugins\SiraUtil.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -116,16 +130,21 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Zenject, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>E:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\Zenject.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Zenject-usage, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>E:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\Zenject-usage.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject-usage.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\LastFmMenuTransitionHelper.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="Config\LastFmCredentials.cs" />
+    <Compile Include="Config\MainConfig.cs" />
     <Compile Include="Installers\MenuInstaller.cs" />
+    <Compile Include="Managers\CredentialsManager.cs" />
+    <Compile Include="Managers\LastFmManager.cs" />
     <Compile Include="Managers\SongManager.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -147,6 +166,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Patches" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="credentials.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
