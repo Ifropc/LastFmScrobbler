@@ -21,9 +21,7 @@ namespace LastFmScrobbler.Managers
 
         public void Initialize()
         {
-            var loaded = _credentialsManager.LoadCredentials();
-
-            if (loaded is not null) _credentials = JsonConvert.DeserializeObject<LastFmCredentials>(loaded);
+            _credentials = _credentialsManager.LoadCredentials();
         }
 
         public string? GetAuthToken()

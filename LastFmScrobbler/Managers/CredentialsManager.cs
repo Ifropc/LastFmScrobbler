@@ -2,6 +2,8 @@
 using System.IO;
 using System.Reflection;
 using JetBrains.Annotations;
+using LastFmScrobbler.Config;
+using Newtonsoft.Json;
 using SiraUtil.Tools;
 using Zenject;
 
@@ -9,8 +11,7 @@ namespace LastFmScrobbler.Managers
 {
     public interface ICredentialsManager
     {
-        
-        public string? LoadCredentials();
+        public LastFmCredentials? LoadCredentials();
     }
 
     public class CredentialsManager : ICredentialsManager
@@ -19,7 +20,7 @@ namespace LastFmScrobbler.Managers
         
         [Inject] private SiraLog _log;
 
-        public string? LoadCredentials()
+        public LastFmCredentials? LoadCredentials()
         {
             try
             {
@@ -28,7 +29,7 @@ namespace LastFmScrobbler.Managers
                 using var stream = assembly.GetManifestResourceStream(CredentialsLocation) ??
                                    throw new Exception("Failed to load last fm credentials");
                 using var reader = new StreamReader(stream);
-                return reader.ReadToEnd();
+                return  JsonConvert.DeserializeObject<LastFmCredentials>(reader.ReadToEnd());
             }
             catch (Exception e)
             {

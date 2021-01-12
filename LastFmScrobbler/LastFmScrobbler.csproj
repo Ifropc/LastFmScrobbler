@@ -168,7 +168,7 @@
     <Folder Include="Patches" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="credentials.txt" />
+    <EmbeddedResource Include="credentials.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
