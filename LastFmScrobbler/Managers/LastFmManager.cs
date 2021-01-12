@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading;
 using LastFmScrobbler.Config;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SiraUtil;
 using SiraUtil.Tools;
 using Zenject;
+
+#pragma warning disable 8618, 649
+// Disables warning: fields are assigned with Zenject.
 
 namespace LastFmScrobbler.Managers
 {
@@ -14,10 +16,10 @@ namespace LastFmScrobbler.Managers
         private const string BaseUrl = "http://ws.audioscrobbler.com";
 
         [Inject] private readonly WebClient _client;
-        [Inject] private readonly SiraLog _log;
 
         private LastFmCredentials? _credentials;
         [Inject] private ICredentialsManager _credentialsManager;
+        [Inject] private SiraLog _log;
 
         public void Initialize()
         {

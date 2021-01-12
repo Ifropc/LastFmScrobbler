@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using SiraUtil.Tools;
-using UnityEngine;
 using Zenject;
-using Object = System.Object;
 
+#pragma warning disable 8618, 649
+// Disables warning: fields are assigned with Zenject.
 
 namespace LastFmScrobbler.Components
 {
@@ -13,9 +12,9 @@ namespace LastFmScrobbler.Components
     {
         [Inject] private readonly SiraLog _log;
 
-        public event Action<IPreviewBeatmapLevel> SongSelectedEvent;
-        public event Action<float> SongDidStartEvent;
-        public event Action<LevelCompletionResults> SongDidFinishEvent;
+        public event Action<IPreviewBeatmapLevel>? SongSelectedEvent;
+        public event Action<float>? SongStartedEvent;
+        public event Action<LevelCompletionResults>? SongFinishedEvent;
 
         public override void StartStandardLevel(
             string gameMode,
@@ -31,7 +30,7 @@ namespace LastFmScrobbler.Components
             Action<StandardLevelScenesTransitionSetupDataSO, LevelCompletionResults> levelFinishedCallback)
         {
             SendSongDidStartEvent(practiceSettings);
-            levelFinishedCallback += (_, r) => SongDidFinishEvent?.Invoke(r);
+            levelFinishedCallback += (_, r) => SongFinishedEvent?.Invoke(r);
 
             base.StartStandardLevel(
                 gameMode,
@@ -60,7 +59,7 @@ namespace LastFmScrobbler.Components
         )
         {
             SendSongDidStartEvent(null);
-            levelFinishedCallback += (_, r) => SongDidFinishEvent?.Invoke(r.levelCompletionResults);
+            levelFinishedCallback += (_, r) => SongFinishedEvent?.Invoke(r.levelCompletionResults);
 
             base.StartMissionLevel(
                 missionId,
@@ -95,7 +94,7 @@ namespace LastFmScrobbler.Components
 
             SongSelectedEvent?.Invoke(previewBeatmapLevel);
             SendSongDidStartEvent(null);
-            levelFinishedCallback += (_, r, _) => SongDidFinishEvent?.Invoke(r);
+            levelFinishedCallback += (_, r, _) => SongFinishedEvent?.Invoke(r);
 
             base.StartMultiplayerLevel(
                 gameMode,
@@ -115,9 +114,9 @@ namespace LastFmScrobbler.Components
             );
         }
 
-        public void SendSongDidStartEvent(PracticeSettings practiceSettings)
+        public void SendSongDidStartEvent(PracticeSettings? practiceSettings)
         {
-            SongDidStartEvent?.Invoke(practiceSettings?.startSongTime ?? 0);
+            SongStartedEvent?.Invoke(practiceSettings?.startSongTime ?? 0);
             _log.Debug("Sent song start event");
         }
     }

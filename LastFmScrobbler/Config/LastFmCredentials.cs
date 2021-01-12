@@ -1,4 +1,7 @@
-﻿namespace LastFmScrobbler.Config
+﻿#pragma warning disable 8618, 649
+// Disables warning: fields are assigned with Zenject.
+
+namespace LastFmScrobbler.Config
 {
     public class LastFmCredentials
     {
