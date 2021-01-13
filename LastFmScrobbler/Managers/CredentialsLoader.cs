@@ -10,7 +10,7 @@ namespace LastFmScrobbler.Managers
 {
     public interface ICredentialsLoader
     {
-        public LastFmCredentials? LoadCredentials();
+        public LastFmCredentials LoadCredentials();
     }
 
     public class CredentialsLoader : ICredentialsLoader
@@ -19,23 +19,16 @@ namespace LastFmScrobbler.Managers
 
         [Inject] private readonly SiraLog _log = null!;
 
-        public LastFmCredentials? LoadCredentials()
+        public LastFmCredentials LoadCredentials()
         {
-            try
-            {
-                var assembly = Assembly.GetExecutingAssembly();
+            var assembly = Assembly.GetExecutingAssembly();
 
-                using var stream = assembly.GetManifestResourceStream(CredentialsLocation) ??
-                                   throw new Exception("Failed to load last fm credentials");
-                using var reader = new StreamReader(stream);
-                return JsonConvert.DeserializeObject<LastFmCredentials>(reader.ReadToEnd());
-            }
-            catch (Exception e)
-            {
-                _log.Error($"Failed to load last fm credentials: {e.Message}");
-                _log.Debug(e);
-                return null;
-            }
+            using var stream = assembly.GetManifestResourceStream(CredentialsLocation) ??
+                               throw new Exception("Failed to load last fm credentials");
+            using var reader = new StreamReader(stream);
+            var credentials = JsonConvert.DeserializeObject<LastFmCredentials>(reader.ReadToEnd());
+            _log.Debug("Credentials loaded");
+            return credentials;
         }
     }
 }

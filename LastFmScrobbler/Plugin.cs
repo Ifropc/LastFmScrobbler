@@ -26,7 +26,7 @@ namespace LastFmScrobbler
         {
             _log = log;
             _harmony = new Harmony(HarmonyID);
-            
+
             var config = cfg.Generated<MainConfig>();
             config.Version = metadata.Version;
 
@@ -37,8 +37,9 @@ namespace LastFmScrobbler
             });
 
             injector.OnMenu<Installers.MenuInstaller>();
-        }
 
+            _log.Debug("Finished plugin initialization");
+        }
 
         #region Disableable
 

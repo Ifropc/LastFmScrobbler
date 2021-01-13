@@ -150,14 +150,18 @@
     <Compile Include="Managers\LastFmClient.cs" />
     <Compile Include="Managers\LinksOpener.cs" />
     <Compile Include="Managers\SongManager.cs" />
-    <Compile Include="Managers\TestHttpManager.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\ScrobblerConfigViewController.cs" />
+    <Compile Include="UI\ScrobblerFlowCoordinator.cs" />
+    <Compile Include="UI\MenuButtonHandler.cs" />
+    <Compile Include="Utils\LastFmException.cs" />
     <Compile Include="Utils\SignatureUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="credentials_sample.json" />
+    <EmbeddedResource Include="credentials.json" />
     <EmbeddedResource Include="manifest.json" />
+    <EmbeddedResource Include="UI\Views\config-view.bsml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
@@ -170,12 +174,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="credentials.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

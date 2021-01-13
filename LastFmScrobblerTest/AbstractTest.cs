@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LastFmScrobbler.Config;
 using NUnit.Framework;
 using SiraUtil;
 using SiraUtil.Tools;
@@ -24,6 +25,7 @@ namespace LastFmScrobblerTest
             // Requred for WebClient
             _container.Bind(typeof(SiraLog).Assembly.GetType("SiraUtil.Config")).FromNew().AsSingle();
             BindInitializable<WebClient>();
+            _container.Bind<MainConfig>().AsSingle();
             
             SetupContainer();
             

@@ -25,12 +25,12 @@ namespace LastFmScrobblerTest
         {
             var client = _container.Resolve<LastFmClient>();
 
-            var t = client.Authorize();
+            var t = client.AuthTokenTask!;
 
             Assert.NotNull(t);
             t!.Wait();
-            Assert.IsNotNull(client.AuthToken);
-            Console.Write(client.AuthToken);
+            Assert.IsNotNull(t.Result);
+            Console.Write(t.Result);
         }
     }
 
@@ -50,7 +50,7 @@ namespace LastFmScrobblerTest
         {
             var client = _container.Resolve<LastFmClient>();
 
-            var t = client.Authorize();
+            var t = client.AuthTokenTask;
 
             Assert.NotNull(t);
             Assert.Throws<AggregateException>(t!.Wait);

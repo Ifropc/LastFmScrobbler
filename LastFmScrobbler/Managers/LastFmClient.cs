@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using LastFmScrobbler.Config;
+using LastFmScrobbler.Utils;
 using Newtonsoft.Json.Linq;
 using SiraUtil;
 using SiraUtil.Tools;
@@ -15,59 +15,44 @@ namespace LastFmScrobbler.Managers
         private const string LastFmBaseUrl = "http://www.last.fm/api";
 
         [Inject] private readonly WebClient _client = null!;
-
-        private LastFmCredentials? _credentials;
-        public string? AuthToken { get; private set; }
+        [Inject] private readonly MainConfig _config = null!;
         [Inject] private readonly ICredentialsLoader _credentialsLoader = null!;
         [Inject] private readonly ILinksOpener _linksOpener = null!;
         [Inject] private readonly SiraLog _log = null!;
 
+        private LastFmCredentials _credentials = null!;
+
+        public Task<string>? AuthTokenTask { get; private set; }
+
         public void Initialize()
         {
             _credentials = _credentialsLoader.LoadCredentials();
+
+            if (!_config.IsAuthorized()) AuthTokenTask = GetToken();
         }
 
-        public Task? Authorize()
+        private async Task<string> GetToken()
         {
-            return WithCredentials(c =>
-            {
-                _log.Debug("Sending auth request");
+            _log.Debug("Sending token request");
 
-                return GetRequest(
-                    $"{ScrobblerBaseUrl}/2.0/?method=auth.gettoken&api_key={c.Key}&format=json",
-                    tokenTask =>
-                    {
-                        var json = CheckError(tokenTask.Result.ConvertToJObject());
+            var url = $"{ScrobblerBaseUrl}/2.0/?method=auth.gettoken&api_key={_credentials.Key}&format=json";
 
-                        AuthToken = json.GetValue("token")!.ToString();
+            var resp = await _client.GetAsync(url, new CancellationToken());
 
-                        var url = $"{LastFmBaseUrl}/auth/?api_key={c.Key}&token={AuthToken}";
+            _log.Debug("Got response for token request");
 
-                        _linksOpener.OpenLink(url);
-                    });
-            });
+            var json = CheckError(resp.ConvertToJObject());
+
+            return json.GetValue("token")!.ToString();
         }
 
-        private T? WithCredentials<T>(Func<LastFmCredentials, T> f)
+        public void Authorize(string authToken)
         {
-            if (_credentials is null) return default;
+            _log.Debug("Sending auth request");
 
-            try
-            {
-                return f(_credentials);
-            }
-            catch (Exception e)
-            {
-                _log.Error(e);
-                return default;
-            }
-        }
+            var url = $"{LastFmBaseUrl}/auth/?api_key={_credentials.Key}&token={authToken!}";
 
-        private Task GetRequest(string url, Action<Task<WebResponse>> a)
-        {
-            var resp = _client.GetAsync(url, new CancellationToken());
-
-            return resp.ContinueWith(a);
+            _linksOpener.OpenLink(url);
         }
 
         private static JObject CheckError(JObject json)
@@ -77,7 +62,8 @@ namespace LastFmScrobbler.Managers
             if (err is null) return json;
 
             var msg = json.GetValue("message")?.ToString();
-            throw new Exception($"Failed to execute request. Error code: {err}, message: {msg}");
+
+            throw new LastFmException(msg ?? "<Unknown http error>", err.ToObject<int>());
         }
     }
 }
