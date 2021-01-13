@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using LastFmScrobbler.Config;
 using Newtonsoft.Json.Linq;
 using SiraUtil;
@@ -13,12 +14,15 @@ namespace LastFmScrobbler.Managers
 {
     public class LastFmManager : IInitializable
     {
-        private const string BaseUrl = "http://ws.audioscrobbler.com";
+        private const string ScrobblerBaseUrl = "http://ws.audioscrobbler.com";
+        private const string LastFmBaseUrl = "http://www.last.fm/api";
 
-        [Inject] private readonly WebClient _client;
+        [Inject] private WebClient _client;
 
         private LastFmCredentials? _credentials;
+        public string? authToken { get; private set; }
         [Inject] private ICredentialsManager _credentialsManager;
+        [Inject] private ILinksManager _linksManager;
         [Inject] private SiraLog _log;
 
         public void Initialize()
@@ -26,39 +30,57 @@ namespace LastFmScrobbler.Managers
             _credentials = _credentialsManager.LoadCredentials();
         }
 
-        public string? GetAuthToken()
+        public Task? Authorize()
         {
             return WithCredentials(c =>
             {
-                var json = GetRequest(
-                    $"{BaseUrl}/2.0/?method=auth.gettoken&api_key={c.api_key}&format=json");
+                _log.Debug("Sending auth request");
 
-                return json.GetValue("token")?.ToString();
+                return GetRequest(
+                    $"{ScrobblerBaseUrl}/2.0/?method=auth.gettoken&api_key={c.api_key}&format=json",
+                    tokenTask =>
+                    {
+                        var json = CheckError(tokenTask.Result.ConvertToJObject());
+
+                        authToken = json.GetValue("token")!.ToString();
+
+                        var url = $"{LastFmBaseUrl}/auth/?api_key={c.api_key}&token={authToken}";
+
+                        _linksManager.OpenLink(url);
+                    });
             });
         }
 
         private T? WithCredentials<T>(Func<LastFmCredentials, T> f)
         {
-            return _credentials is null ? default : f(_credentials);
+            if (_credentials is null) return default;
+
+            try
+            {
+                return f(_credentials);
+            }
+            catch (Exception e)
+            {
+                _log.Error(e);
+                return default;
+            }
         }
 
-        private JObject GetRequest(string url)
+        private Task GetRequest(string url, Action<Task<WebResponse>> a)
         {
             var resp = _client.GetAsync(url, new CancellationToken());
-            return CheckError(resp.Result.ConvertToJObject(), url);
+
+            return resp.ContinueWith(a);
         }
 
-        private JObject CheckError(JObject json, string url)
+        private static JObject CheckError(JObject json)
         {
             var err = json.GetValue("error");
 
-            if (err is not null)
-            {
-                var msg = json.GetValue("message")?.ToString();
-                _log.Error($"Failed to execute request to {url}. Error code: {err}, message: {msg}");
-            }
+            if (err is null) return json;
 
-            return json;
+            var msg = json.GetValue("message")?.ToString();
+            throw new Exception($"Failed to execute request. Error code: {err}, message: {msg}");
         }
     }
 }

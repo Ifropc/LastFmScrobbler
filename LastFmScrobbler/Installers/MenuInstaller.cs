@@ -1,4 +1,5 @@
-﻿using LastFmScrobbler.Components;
+﻿using System;
+using LastFmScrobbler.Components;
 using LastFmScrobbler.Managers;
 using SiraUtil;
 using UnityEngine;
@@ -12,7 +13,12 @@ namespace LastFmScrobbler.Installers
         {
             Rebind<MenuTransitionsHelper, LastFmMenuTransitionHelper>();
 
+            Container.BindInterfacesAndSelfTo<CredentialsManager>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<LinksManager>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<LastFmManager>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<SongManager>().AsSingle().NonLazy();
+            
+            Container.BindInterfacesAndSelfTo<TestHttpManager>().AsSingle().NonLazy();
         }
 
         private void Rebind<T, R>() where T : MonoBehaviour where R : T

@@ -26,7 +26,7 @@ namespace LastFmScrobbler
 
             injector.On<PCAppInit>().Pseudo(container => { container.BindLoggerAsSiraLogger(log); });
 
-            injector.OnMenu<Installers.MenuInstaller>().ShortCircuitForTutorial();
+            injector.OnMenu<Installers.MenuInstaller>();
         }
 
 

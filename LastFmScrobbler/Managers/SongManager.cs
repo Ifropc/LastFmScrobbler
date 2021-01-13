@@ -11,10 +11,10 @@ namespace LastFmScrobbler.Managers
     public class SongManager : IInitializable, IDisposable
     {
         private Action<LevelCollectionViewController, IPreviewBeatmapLevel> _eventSelectedAction;
+
         [Inject] private LevelCollectionViewController _levelCollectionViewController;
         [Inject] private SiraLog _log;
         [Inject] private MissionSelectionMapViewController _missionSelection;
-
 
         private IPreviewBeatmapLevel _selected;
         [Inject] private LastFmMenuTransitionHelper _transitionHelper;

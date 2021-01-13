@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using LastFmScrobbler.Config;
 using LastFmScrobbler.Managers;
 using Newtonsoft.Json;
@@ -17,20 +20,22 @@ namespace LastFmScrobblerTest
         protected override void SetupContainer()
         {
             _container.Bind<ICredentialsManager>().To<TestCredentialsManager>().AsSingle();
+            _container.Bind<ILinksManager>().To<TestLinksManager>().AsSingle();
 
             BindInitializable<LastFmManager>();
         }
 
         [Test]
-        public void TestGetRequest()
+        public void TestAuthorize()
         {
             var m = _container.Resolve<LastFmManager>();
 
-            var tok = m.GetAuthToken();
-
-            Console.Write($"Got token: {tok}");
-
-            Assert.IsNotEmpty(tok);
+            var t = m.Authorize();
+            
+            Assert.NotNull(t);
+            t!.Wait();
+            Assert.IsNotNull(m.authToken);
+            Console.Write(m.authToken);
         }
     }
 
@@ -40,6 +45,7 @@ namespace LastFmScrobblerTest
         protected override void SetupContainer()
         {
             _container.Bind<ICredentialsManager>().To<TestCredentialsManagerFailedCreds>().AsSingle();
+            _container.Bind<ILinksManager>().To<TestLinksManager>().AsSingle();
 
             BindInitializable<LastFmManager>();
         }
@@ -49,11 +55,10 @@ namespace LastFmScrobblerTest
         {
             var m = _container.Resolve<LastFmManager>();
 
-            var tok = m.GetAuthToken();
-
-            Console.Write($"Got token: {tok}");
-
-            Assert.IsNull(tok);
+            var t = m.Authorize();
+            
+            Assert.NotNull(t);
+            Assert.Throws<AggregateException>(t!.Wait);
         }
     }
 
@@ -74,6 +79,38 @@ namespace LastFmScrobblerTest
             var t = File.ReadAllText("../../../../LastFmScrobbler/credentials.txt");
 
             return JsonConvert.DeserializeObject<LastFmCredentials>(t);
+        }
+    }
+
+    internal class TestLinksManager : ILinksManager
+    {
+        public void OpenLink(string url)
+        {
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
     }
 }
