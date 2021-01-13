@@ -1,16 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using LastFmScrobbler.Config;
 using LastFmScrobbler.Managers;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using SiraUtil;
-using SiraUtil.Tools;
-using Zenject;
 
 namespace LastFmScrobblerTest
 {
@@ -19,23 +14,23 @@ namespace LastFmScrobblerTest
     {
         protected override void SetupContainer()
         {
-            _container.Bind<ICredentialsManager>().To<TestCredentialsManager>().AsSingle();
-            _container.Bind<ILinksManager>().To<TestLinksManager>().AsSingle();
+            _container.Bind<ICredentialsLoader>().To<TestCredentialsLoader>().AsSingle();
+            _container.Bind<ILinksOpener>().To<TestLinksOpener>().AsSingle();
 
-            BindInitializable<LastFmManager>();
+            BindInitializable<LastFmClient>();
         }
 
         [Test]
         public void TestAuthorize()
         {
-            var m = _container.Resolve<LastFmManager>();
+            var client = _container.Resolve<LastFmClient>();
 
-            var t = m.Authorize();
-            
+            var t = client.Authorize();
+
             Assert.NotNull(t);
             t!.Wait();
-            Assert.IsNotNull(m.authToken);
-            Console.Write(m.authToken);
+            Assert.IsNotNull(client.AuthToken);
+            Console.Write(client.AuthToken);
         }
     }
 
@@ -44,45 +39,45 @@ namespace LastFmScrobblerTest
     {
         protected override void SetupContainer()
         {
-            _container.Bind<ICredentialsManager>().To<TestCredentialsManagerFailedCreds>().AsSingle();
-            _container.Bind<ILinksManager>().To<TestLinksManager>().AsSingle();
+            _container.Bind<ICredentialsLoader>().To<TestCredentialsLoaderFailedCreds>().AsSingle();
+            _container.Bind<ILinksOpener>().To<TestLinksOpener>().AsSingle();
 
-            BindInitializable<LastFmManager>();
+            BindInitializable<LastFmClient>();
         }
 
         [Test]
         public void TestFailGetCreds()
         {
-            var m = _container.Resolve<LastFmManager>();
+            var client = _container.Resolve<LastFmClient>();
 
-            var t = m.Authorize();
-            
+            var t = client.Authorize();
+
             Assert.NotNull(t);
             Assert.Throws<AggregateException>(t!.Wait);
         }
     }
 
-    internal class TestCredentialsManagerFailedCreds : TestCredentialsManager
+    internal class TestCredentialsLoaderFailedCreds : TestCredentialsLoader
     {
         public override LastFmCredentials? LoadCredentials()
         {
             var c = base.LoadCredentials();
-            c!.api_key += "123";
+            c!.Key += "123";
             return c;
         }
     }
 
-    internal class TestCredentialsManager : ICredentialsManager
+    internal class TestCredentialsLoader : ICredentialsLoader
     {
         public virtual LastFmCredentials? LoadCredentials()
         {
-            var t = File.ReadAllText("../../../../LastFmScrobbler/credentials.txt");
+            var t = File.ReadAllText("../../../../LastFmScrobbler/credentials.json");
 
             return JsonConvert.DeserializeObject<LastFmCredentials>(t);
         }
     }
 
-    internal class TestLinksManager : ILinksManager
+    internal class TestLinksOpener : ILinksOpener
     {
         public void OpenLink(string url)
         {

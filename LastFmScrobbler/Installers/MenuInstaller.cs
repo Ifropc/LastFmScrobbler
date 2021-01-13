@@ -13,9 +13,9 @@ namespace LastFmScrobbler.Installers
         {
             Rebind<MenuTransitionsHelper, LastFmMenuTransitionHelper>();
 
-            Container.BindInterfacesAndSelfTo<CredentialsManager>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<LinksManager>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<LastFmManager>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<CredentialsLoader>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<LinksOpener>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<LastFmClient>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<SongManager>().AsSingle().NonLazy();
             
             Container.BindInterfacesAndSelfTo<TestHttpManager>().AsSingle().NonLazy();

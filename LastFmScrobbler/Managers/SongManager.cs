@@ -3,21 +3,18 @@ using LastFmScrobbler.Components;
 using SiraUtil.Tools;
 using Zenject;
 
-#pragma warning disable 8618, 649
-// Disables warning: fields are assigned with Zenject.
-
 namespace LastFmScrobbler.Managers
 {
     public class SongManager : IInitializable, IDisposable
     {
-        private Action<LevelCollectionViewController, IPreviewBeatmapLevel> _eventSelectedAction;
+        private Action<LevelCollectionViewController, IPreviewBeatmapLevel> _eventSelectedAction = null!;
 
-        [Inject] private LevelCollectionViewController _levelCollectionViewController;
-        [Inject] private SiraLog _log;
-        [Inject] private MissionSelectionMapViewController _missionSelection;
+        [Inject] private readonly LevelCollectionViewController _levelCollectionViewController = null!;
+        [Inject] private readonly SiraLog _log = null!;
+        [Inject] private readonly MissionSelectionMapViewController _missionSelection = null!;
 
-        private IPreviewBeatmapLevel _selected;
-        [Inject] private LastFmMenuTransitionHelper _transitionHelper;
+        private IPreviewBeatmapLevel _selected = null!;
+        [Inject] private readonly LastFmMenuTransitionHelper _transitionHelper = null!;
 
         public void Dispose()
         {

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using LastFmScrobbler.Utils;
 using NUnit.Framework;
-
-#pragma warning disable 8618, 649
-// Disables warning: fields are assigned with Zenject.
 
 namespace LastFmScrobblerTest
 {

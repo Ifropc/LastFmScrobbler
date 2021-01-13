@@ -3,4 +3,4 @@
 **.user
 **/bin
 **/obj
-**/credentials**
+**/credentials.json

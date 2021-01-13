@@ -7,27 +7,24 @@ using SiraUtil;
 using SiraUtil.Tools;
 using Zenject;
 
-#pragma warning disable 8618, 649
-// Disables warning: fields are assigned with Zenject.
-
 namespace LastFmScrobbler.Managers
 {
-    public class LastFmManager : IInitializable
+    public class LastFmClient : IInitializable
     {
         private const string ScrobblerBaseUrl = "http://ws.audioscrobbler.com";
         private const string LastFmBaseUrl = "http://www.last.fm/api";
 
-        [Inject] private WebClient _client;
+        [Inject] private readonly WebClient _client = null!;
 
         private LastFmCredentials? _credentials;
-        public string? authToken { get; private set; }
-        [Inject] private ICredentialsManager _credentialsManager;
-        [Inject] private ILinksManager _linksManager;
-        [Inject] private SiraLog _log;
+        public string? AuthToken { get; private set; }
+        [Inject] private readonly ICredentialsLoader _credentialsLoader = null!;
+        [Inject] private readonly ILinksOpener _linksOpener = null!;
+        [Inject] private readonly SiraLog _log = null!;
 
         public void Initialize()
         {
-            _credentials = _credentialsManager.LoadCredentials();
+            _credentials = _credentialsLoader.LoadCredentials();
         }
 
         public Task? Authorize()
@@ -37,16 +34,16 @@ namespace LastFmScrobbler.Managers
                 _log.Debug("Sending auth request");
 
                 return GetRequest(
-                    $"{ScrobblerBaseUrl}/2.0/?method=auth.gettoken&api_key={c.api_key}&format=json",
+                    $"{ScrobblerBaseUrl}/2.0/?method=auth.gettoken&api_key={c.Key}&format=json",
                     tokenTask =>
                     {
                         var json = CheckError(tokenTask.Result.ConvertToJObject());
 
-                        authToken = json.GetValue("token")!.ToString();
+                        AuthToken = json.GetValue("token")!.ToString();
 
-                        var url = $"{LastFmBaseUrl}/auth/?api_key={c.api_key}&token={authToken}";
+                        var url = $"{LastFmBaseUrl}/auth/?api_key={c.Key}&token={AuthToken}";
 
-                        _linksManager.OpenLink(url);
+                        _linksOpener.OpenLink(url);
                     });
             });
         }

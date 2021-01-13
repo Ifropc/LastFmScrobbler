@@ -6,21 +6,18 @@ using Newtonsoft.Json;
 using SiraUtil.Tools;
 using Zenject;
 
-#pragma warning disable 8618, 649
-// Disables warning: fields are assigned with Zenject.
-
 namespace LastFmScrobbler.Managers
 {
-    public interface ICredentialsManager
+    public interface ICredentialsLoader
     {
         public LastFmCredentials? LoadCredentials();
     }
 
-    public class CredentialsManager : ICredentialsManager
+    public class CredentialsLoader : ICredentialsLoader
     {
-        private const string CredentialsLocation = "LastFmScrobbler.credentials.txt";
+        private const string CredentialsLocation = "LastFmScrobbler.credentials.json";
 
-        [Inject] private SiraLog _log;
+        [Inject] private readonly SiraLog _log = null!;
 
         public LastFmCredentials? LoadCredentials()
         {

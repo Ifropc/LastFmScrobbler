@@ -146,9 +146,9 @@
     <Compile Include="Config\LastFmCredentials.cs" />
     <Compile Include="Config\MainConfig.cs" />
     <Compile Include="Installers\MenuInstaller.cs" />
-    <Compile Include="Managers\CredentialsManager.cs" />
-    <Compile Include="Managers\LastFmManager.cs" />
-    <Compile Include="Managers\LinksManager.cs" />
+    <Compile Include="Managers\CredentialsLoader.cs" />
+    <Compile Include="Managers\LastFmClient.cs" />
+    <Compile Include="Managers\LinksOpener.cs" />
     <Compile Include="Managers\SongManager.cs" />
     <Compile Include="Managers\TestHttpManager.cs" />
     <Compile Include="Plugin.cs" />
@@ -156,6 +156,7 @@
     <Compile Include="Utils\SignatureUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="credentials_sample.json" />
     <EmbeddedResource Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
@@ -171,10 +172,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Patches" />
+    <Folder Include="UI" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="credentials.txt" />
+    <EmbeddedResource Include="credentials.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

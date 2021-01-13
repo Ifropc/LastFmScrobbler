@@ -1,16 +1,13 @@
 ﻿using UnityEngine;
 
-#pragma warning disable 8618, 649
-// Disables warning: fields are assigned with Zenject.
-
 namespace LastFmScrobbler.Managers
 {
-    public interface ILinksManager
+    public interface ILinksOpener
     {
         public void OpenLink(string url);
     }
 
-    public class LinksManager : ILinksManager
+    public class LinksOpener : ILinksOpener
     {
         public void OpenLink(string url)
         {

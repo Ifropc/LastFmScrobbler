@@ -1,7 +1,10 @@
 ﻿using System;
 using HarmonyLib;
 using IPA;
+using IPA.Config.Stores;
+using IPA.Loader;
 using IPA.Logging;
+using LastFmScrobbler.Config;
 using SiraUtil;
 using SiraUtil.Zenject;
 using IPAConfig = IPA.Config.Config;
@@ -19,12 +22,19 @@ namespace LastFmScrobbler
         private readonly Logger _log;
 
         [Init]
-        public Plugin(IPAConfig cfg, Logger log, Zenjector injector)
+        public Plugin(IPAConfig cfg, Logger log, Zenjector injector, PluginMetadata metadata)
         {
             _log = log;
             _harmony = new Harmony(HarmonyID);
+            
+            var config = cfg.Generated<MainConfig>();
+            config.Version = metadata.Version;
 
-            injector.On<PCAppInit>().Pseudo(container => { container.BindLoggerAsSiraLogger(log); });
+            injector.On<PCAppInit>().Pseudo(container =>
+            {
+                container.BindLoggerAsSiraLogger(log);
+                container.BindInstance(config).AsSingle();
+            });
 
             injector.OnMenu<Installers.MenuInstaller>();
         }

@@ -4,9 +4,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-#pragma warning disable 8618, 649
-// Disables warning: fields are assigned with Zenject.
-
 namespace LastFmScrobbler.Utils
 {
     public class SignatureUtils
