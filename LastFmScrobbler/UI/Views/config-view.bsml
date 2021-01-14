@@ -1,12 +1,12 @@
 ﻿<bg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd">
 
-    <vertical id="main-id" bg="panel-top-gradient" pref-height="30" bg-color="~colour">
-        <text text="test" align="Left"/>
+    <vertical id="container-auth" bg="panel-top" bg-color="~auth-color" >
+        <text text="~auth-text" align="Left"/>
+
+        <button id="button-auth" on-click="clicked-auth-button" text="Auth" interactable="false" pref-height="10"/>
+
+        <button id="button-confirm" on-click="clicked-confirm-button" text="Confirm" interactable="false"
+                hover-hint="Confirm your browser authorization" pref-height="10"/>
     </vertical>
-    
-    <button id="button-auth" on-click="clicked-auth-button" text="Button auth" interactable="false"/>
-    
-    <button id="button-confirm" on-click="clicked-confirm-button" text="Confirm authorization" active="false"
-            hover-hint="Please authorize first"/>
 </bg>

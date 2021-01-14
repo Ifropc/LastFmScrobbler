@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using LastFmScrobbler.Config;
 using LastFmScrobbler.Utils;
@@ -11,7 +12,7 @@ namespace LastFmScrobbler.Managers
 {
     public class LastFmClient : IInitializable
     {
-        private const string ScrobblerBaseUrl = "http://ws.audioscrobbler.com";
+        private const string ScrobblerBaseUrl = "http://ws.audioscrobbler.com/2.0/?";
         private const string LastFmBaseUrl = "http://www.last.fm/api";
 
         [Inject] private readonly WebClient _client = null!;
@@ -35,15 +36,13 @@ namespace LastFmScrobbler.Managers
         {
             _log.Debug("Sending token request");
 
-            var url = $"{ScrobblerBaseUrl}/2.0/?method=auth.gettoken&api_key={_credentials.Key}&format=json";
+            var url = $"{ScrobblerBaseUrl}method=auth.gettoken&api_key={_credentials.Key}&format=json";
 
             var resp = await _client.GetAsync(url, new CancellationToken());
 
             _log.Debug("Got response for token request");
 
-            var json = CheckError(resp.ConvertToJObject());
-
-            return json.GetValue("token")!.ToString();
+            return CheckError<AuthToken>(resp.ConvertToJObject()).Token;
         }
 
         public void Authorize(string authToken)
@@ -55,11 +54,29 @@ namespace LastFmScrobbler.Managers
             _linksOpener.OpenLink(url);
         }
 
-        private static JObject CheckError(JObject json)
+        public async Task<AuthSession> GetSession(string token)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                {"method", "auth.getSession"},
+                {"api_key", _credentials.Key},
+                {"token", token}
+            };
+            
+            var url = $"{ScrobblerBaseUrl}{SignatureUtils.SignedParams(parameters, _credentials.Secret)}";
+            
+            var resp = await _client.GetAsync(url, new CancellationToken());
+            
+            _log.Debug("Got response for auth request");
+
+            return CheckError<AuthSession>(resp.ConvertToJObject());
+        }
+
+        private static T CheckError<T>(JObject json)
         {
             var err = json.GetValue("error");
 
-            if (err is null) return json;
+            if (err is null) return json.ToObject<T>() ?? throw new LastFmException($"Failed to deserialize {json}");
 
             var msg = json.GetValue("message")?.ToString();
 

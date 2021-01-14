@@ -8,21 +8,36 @@ namespace LastFmScrobbler.Utils
 {
     public class SignatureUtils
     {
+        public static string SignedParams(Dictionary<string, string> parameters, string secret)
+        {
+            var builder = new StringBuilder();
+
+            foreach (var (key, value) in parameters)
+            {
+                builder.Append(key).Append('=').Append(value).Append('&');
+            }
+
+            string signature = Sign(parameters, secret);
+
+            builder.Append("api_sig=").Append(signature).Append("&format=json");
+
+            return builder.ToString();
+        }
+
         public static string Sign(Dictionary<string, string> parameters, string secret)
         {
             var md5 = MD5.Create();
 
-            var result = "";
+            var builder = new StringBuilder();
 
             foreach (var (key, value) in parameters.OrderBy(p => p.Key))
             {
-                result += key;
-                result += value;
+                builder.Append(key).Append(value);
             }
 
-            result += secret;
+            builder.Append(secret);
 
-            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(result));
+            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(builder.ToString()));
 
             return BitConverter.ToString(hash).Replace("-", string.Empty);
         }

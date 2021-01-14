@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using LastFmScrobbler.Config;
 using LastFmScrobbler.Managers;
+using LastFmScrobbler.Utils;
 using SiraUtil;
 using SiraUtil.Tools;
 using UnityEngine.UI;
@@ -19,8 +21,24 @@ namespace LastFmScrobbler.UI
         [Inject] private readonly SiraLog _log = null!;
 
         [UIComponent("button-auth")] private Button _authButton;
+        [UIComponent("button-confirm")] private Button _confirmButton;
 
-        [UIValue("colour")] private string colour = "#BD288199";
+        private bool _authorized;
+        [UIValue("authorized")]
+        public bool Authorized
+        {
+            get => _authorized;
+            set
+            {
+                _authorized = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(AuthText));
+                NotifyPropertyChanged(nameof(AuthColor));
+            }
+        }
+
+        [UIValue("auth-text")] public string AuthText => Authorized ? "Authorized" : "Not authorized";
+        [UIValue("auth-color")] public string AuthColor => Authorized ? "#baf2bb" : "#BD288199";
 
         private string _token = null!;
 
@@ -33,32 +51,48 @@ namespace LastFmScrobbler.UI
             await Utilities.PauseChamp;
             await Utilities.PauseChamp;
 
-            try
-            {
-                var token = await _lastFmClient.AuthTokenTask;
-                ConsumeToken(token);
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-            }
+            SafeAwait(_lastFmClient.AuthTokenTask, ConsumeToken);
         }
 
         [UIAction("clicked-auth-button")]
         protected void ClickedAuth()
         {
             _lastFmClient.Authorize(_token);
+            _confirmButton.interactable = true;
+            _authButton.interactable = false;
         }
 
         [UIAction("clicked-confirm-button")]
-        protected void ClickedConfirm()
+        protected async void ClickedConfirm()
         {
+            _confirmButton.interactable = false;
+
+            SafeAwait(_lastFmClient.GetSession(_token), SessionAuthorized, () => _authButton.interactable = true);
+        }
+
+        private async void SafeAwait<T>(Task<T> task, Action<T> onSuccess, Action? onError = null)
+        {
+            try
+            {
+                onSuccess(await task);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                onError?.Invoke();
+            }
         }
 
         private void ConsumeToken(string token)
         {
             _authButton.interactable = true;
             _token = token;
+        }
+
+        private void SessionAuthorized(AuthSession authSession)
+        {
+            _log.Debug("Auth confirmed");
+            Authorized = true;
         }
 
         private void HandleException(Exception e)

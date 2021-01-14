@@ -156,6 +156,7 @@
     <Compile Include="UI\ScrobblerFlowCoordinator.cs" />
     <Compile Include="UI\MenuButtonHandler.cs" />
     <Compile Include="Utils\LastFmException.cs" />
+    <Compile Include="Utils\LastFmResponses.cs" />
     <Compile Include="Utils\SignatureUtils.cs" />
   </ItemGroup>
   <ItemGroup>
