@@ -7,7 +7,6 @@ using SiraUtil.Converters;
 using Version = SemVer.Version;
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
-
 namespace LastFmScrobbler.Config
 {
     public class MainConfig
@@ -17,9 +16,9 @@ namespace LastFmScrobbler.Config
         [NonNullable, UseConverter(typeof(VersionConverter))]
         public Version Version { get; set; } = new Version("0.0.0");
 
-        public string? SessionName { get; set; } = null;
+        public virtual string? SessionName { get; set; } = null;
 
-        public string? SessionKey { get; set; } = null;
+        public virtual string? SessionKey { get; set; } = null;
 
         public bool IsAuthorized()
         {

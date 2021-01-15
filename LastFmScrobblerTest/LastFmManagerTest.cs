@@ -32,6 +32,20 @@ namespace LastFmScrobblerTest
             Assert.IsNotNull(t.Result);
             Console.Write(t.Result);
         }
+
+        [Test]
+        public void TestCurrentlyPlaying()
+        {
+            var cfg = _container.Resolve<MainConfig>();
+            var client = _container.Resolve<LastFmClient>();
+
+            var t = client.SendNowPlaying(cfg.SessionKey!, "Yes", "Roundabout")!;
+
+            Assert.NotNull(t);
+            t!.Wait();
+            Assert.IsNotNull(t.IsCompletedSuccessfully);
+            Console.Write(t.Result);
+        }
     }
 
     [TestFixture]

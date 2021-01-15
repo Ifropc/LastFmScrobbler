@@ -24,6 +24,7 @@ namespace LastFmScrobbler.UI
         [UIComponent("button-confirm")] private Button _confirmButton;
 
         private bool _authorized;
+
         [UIValue("authorized")]
         public bool Authorized
         {
@@ -91,7 +92,9 @@ namespace LastFmScrobbler.UI
 
         private void SessionAuthorized(AuthSession authSession)
         {
-            _log.Debug("Auth confirmed");
+            _config.SessionKey = authSession.Key;
+            _config.SessionName = authSession.Name;
+            _log.Debug($"Auth confirmed for {authSession.Name}");
             Authorized = true;
         }
 

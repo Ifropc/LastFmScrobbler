@@ -7,6 +7,11 @@ namespace LastFmScrobbler.Utils
         [JsonProperty(PropertyName = "token")] public string Token { get; set; } = null!;
     }
 
+    public class AuthSessionResponse
+    {
+        [JsonProperty(PropertyName = "session")] public AuthSession Session { get; set; } = null!;
+    }
+
     public class AuthSession
     {
         [JsonProperty(PropertyName = "name")] public string Name { get; set; } = null!;

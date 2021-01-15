@@ -39,6 +39,7 @@ namespace LastFmScrobbler.UI
         {
             if (_restartRequired)
             {
+                _restartRequired = false;
                 _fadeInOutController.FadeOut(0.35f, () => _transitionHelper.RestartGame());
             }
             else
