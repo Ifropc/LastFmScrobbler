@@ -7,14 +7,14 @@ namespace LastFmScrobbler.Utils
         private const int NotAuthToken = 14;
         private const int ServiceOffline = 11;
         private const int ServerError = 16;
+        public readonly int? ErrorCode;
 
         public readonly string Message;
-        public readonly int? ErrorCode;
 
         public LastFmException(string message, int? errorCode = null)
         {
-            this.Message = message;
-            this.ErrorCode = errorCode;
+            Message = message;
+            ErrorCode = errorCode;
         }
 
         public bool ShouldBeReported()

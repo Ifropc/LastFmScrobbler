@@ -5,33 +5,30 @@ using Zenject;
 
 namespace LastFmScrobbler.UI
 {
-    public class MenuButtonHandler: IInitializable, IDisposable
+    public class MenuButtonHandler : IInitializable, IDisposable
     {
-        private readonly MenuButton _menuButton;
         private readonly ScrobblerFlowCoordinator _flowCoordinator;
-        
+        private readonly MenuButton _menuButton;
+
         public MenuButtonHandler(ScrobblerFlowCoordinator flowCoordinator)
         {
             _flowCoordinator = flowCoordinator;
-            _menuButton =  new MenuButton("Scrobbler", OnClick);
+            _menuButton = new MenuButton("Scrobbler", OnClick);
         }
 
-        public void OnClick()
+        public void Dispose()
         {
-            BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(_flowCoordinator);
+            if (MenuButtons.IsSingletonAvailable) MenuButtons.instance.UnregisterButton(_menuButton);
         }
-        
+
         public void Initialize()
         {
             MenuButtons.instance.RegisterButton(_menuButton);
         }
 
-        public void Dispose()
+        public void OnClick()
         {
-            if (MenuButtons.IsSingletonAvailable)
-            {
-                MenuButtons.instance.UnregisterButton(_menuButton);
-            }
+            BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(_flowCoordinator);
         }
     }
 }

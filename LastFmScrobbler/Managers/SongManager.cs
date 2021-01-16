@@ -8,12 +8,12 @@ namespace LastFmScrobbler.Managers
 {
     public class SongManager : IInitializable, IDisposable
     {
+        [Inject] private readonly LastFmClient _client = null!;
+        [Inject] private readonly MainConfig _config = null!;
         [Inject] private readonly LevelCollectionViewController _levelCollectionViewController = null!;
         [Inject] private readonly SiraLog _log = null!;
         [Inject] private readonly MissionSelectionMapViewController _missionSelection = null!;
         [Inject] private readonly LastFmMenuTransitionHelper _transitionHelper = null!;
-        [Inject] private readonly LastFmClient _client = null!;
-        [Inject] private readonly MainConfig _config = null!;
 
         private Action<LevelCollectionViewController, IPreviewBeatmapLevel> _eventSelectedAction = null!;
 
@@ -89,16 +89,13 @@ namespace LastFmScrobbler.Managers
                 _log.Warning("Unexpected null in song data");
                 return;
             }
-            
+
             _songData = null;
-            
+
             var notEnoughPlayed = (results.endSongTime - toScrobble.Offset) / _selected.songDuration <
                                   _config.SongScrobbleLength / 100d;
 
-            if (!toScrobble.ShouldBeScrobbled || notEnoughPlayed)
-            {
-                return;
-            }
+            if (!toScrobble.ShouldBeScrobbled || notEnoughPlayed) return;
 
             try
             {

@@ -7,7 +7,7 @@ namespace LastFmScrobbler.Components
 {
     public class LastFmMenuTransitionHelper : MenuTransitionsHelper
     {
-        [Inject] private readonly SiraLog _log= null!;
+        [Inject] private readonly SiraLog _log = null!;
 
         public event Action<IPreviewBeatmapLevel>? SongSelectedEvent;
         public event Action<float>? SongStartedEvent;

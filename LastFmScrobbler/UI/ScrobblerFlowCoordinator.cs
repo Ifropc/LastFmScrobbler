@@ -1,7 +1,5 @@
-﻿using System;
-using BeatSaberMarkupLanguage;
+﻿using BeatSaberMarkupLanguage;
 using HMUI;
-using LastFmScrobbler.Components;
 using LastFmScrobbler.Config;
 using Zenject;
 
@@ -12,19 +10,19 @@ namespace LastFmScrobbler.UI
         [Inject] private readonly MainConfig _config = null!;
         [Inject] private readonly ScrobblerConfigViewController _configViewController = null!;
         [Inject] private readonly FadeInOutController _fadeInOutController = null!;
-        [Inject] private readonly MenuTransitionsHelper _transitionHelper = null!;
         [Inject] private readonly MainFlowCoordinator _mainFlowCoordinator = null!;
+        [Inject] private readonly MenuTransitionsHelper _transitionHelper = null!;
 
         private bool _restartRequired;
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             if (!firstActivation) return;
-            
+
             SetTitle("LastFm Scrobbler");
             showBackButton = true;
             ProvideInitialViewControllers(_configViewController);
-            
+
             _configViewController.Initialize();
 
             _config.OnChanged += ConfigUpdated;

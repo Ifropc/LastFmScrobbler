@@ -13,8 +13,8 @@ namespace LastFmScrobblerTest
     public abstract class AbstractTest
     {
         protected DiContainer _container;
-        protected List<IInitializable> _initializables;
         protected List<IDisposable> _dispozables;
+        protected List<IInitializable> _initializables;
 
         [SetUp]
         public void SetUp()

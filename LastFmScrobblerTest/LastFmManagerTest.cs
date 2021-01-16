@@ -45,15 +45,15 @@ namespace LastFmScrobblerTest
             Assert.IsNotNull(t.IsCompletedSuccessfully);
             Console.Write(t.Result);
         }
-        
+
         [Test]
         public void TestScrobble()
         {
             var client = _container.Resolve<LastFmClient>();
 
             // Test non-english symbols
-            var t = client.SendScrobble( "DJ Krush", "若輩", 271)!;
-            
+            var t = client.SendScrobble("DJ Krush", "若輩", 271)!;
+
             Assert.NotNull(t);
             t!.Wait();
             Assert.IsNotNull(t.IsCompletedSuccessfully);

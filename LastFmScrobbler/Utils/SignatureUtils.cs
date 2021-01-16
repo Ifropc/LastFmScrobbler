@@ -12,10 +12,7 @@ namespace LastFmScrobbler.Utils
         {
             var builder = new StringBuilder();
 
-            foreach (var (key, value) in parameters)
-            {
-                builder.Append(key).Append('=').Append(value).Append('&');
-            }
+            foreach (var (key, value) in parameters) builder.Append(key).Append('=').Append(value).Append('&');
 
             string signature = Sign(parameters, secret);
 
@@ -30,10 +27,7 @@ namespace LastFmScrobbler.Utils
 
             var builder = new StringBuilder();
 
-            foreach (var (key, value) in parameters.OrderBy(p => p.Key))
-            {
-                builder.Append(key).Append(value);
-            }
+            foreach (var (key, value) in parameters.OrderBy(p => p.Key)) builder.Append(key).Append(value);
 
             builder.Append(secret);
 

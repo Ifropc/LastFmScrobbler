@@ -9,7 +9,8 @@ namespace LastFmScrobbler.Utils
 
     public class AuthSessionResponse
     {
-        [JsonProperty(PropertyName = "session")] public AuthSession Session { get; set; } = null!;
+        [JsonProperty(PropertyName = "session")]
+        public AuthSession Session { get; set; } = null!;
     }
 
     public class AuthSession
@@ -21,19 +22,25 @@ namespace LastFmScrobbler.Utils
 
     public class ScrobbleResponse
     {
-        [JsonProperty(PropertyName = "scrobbles")] public Scrobbles Scrobbles { get; set; } = null!;
+        [JsonProperty(PropertyName = "scrobbles")]
+        public Scrobbles Scrobbles { get; set; } = null!;
     }
 
     public class Scrobbles
     {
         [JsonProperty(PropertyName = "@attr")] public ScrobbleAttribute Attribute { get; set; } = null!;
-        [JsonProperty(PropertyName = "scrobble")] public ScrobbleData Data { get; set; } = null!;
+
+        [JsonProperty(PropertyName = "scrobble")]
+        public ScrobbleData Data { get; set; } = null!;
     }
 
     public class ScrobbleAttribute
     {
-        [JsonProperty(PropertyName = "accepted")] public int Accepted { get; set; }
-        [JsonProperty(PropertyName = "ignored")] public int Ignored { get; set; }
+        [JsonProperty(PropertyName = "accepted")]
+        public int Accepted { get; set; }
+
+        [JsonProperty(PropertyName = "ignored")]
+        public int Ignored { get; set; }
     }
 
     public class ScrobbleData

@@ -22,9 +22,10 @@ namespace LastFmScrobbler.UI
 
         [UIComponent("button-auth")] private Button _authButton;
         [UIComponent("button-confirm")] private Button _confirmButton;
+        
+        private string _token = null!;
 
         private bool _authorized;
-
         [UIValue("authorized")]
         public bool Authorized
         {
@@ -40,8 +41,6 @@ namespace LastFmScrobbler.UI
 
         [UIValue("auth-text")] public string AuthText => Authorized ? "Authorized" : "Not authorized";
         [UIValue("auth-color")] public string AuthColor => Authorized ? "#baf2bb" : "#BD288199";
-
-        private string _token = null!;
 
         public async void Initialize()
         {
