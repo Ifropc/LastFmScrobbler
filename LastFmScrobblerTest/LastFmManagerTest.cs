@@ -36,15 +36,28 @@ namespace LastFmScrobblerTest
         [Test]
         public void TestCurrentlyPlaying()
         {
-            var cfg = _container.Resolve<MainConfig>();
             var client = _container.Resolve<LastFmClient>();
 
-            var t = client.SendNowPlaying(cfg.SessionKey!, "Yes", "Roundabout")!;
+            var t = client.SendNowPlaying("Yes", "Roundabout", 510)!;
 
             Assert.NotNull(t);
             t!.Wait();
             Assert.IsNotNull(t.IsCompletedSuccessfully);
             Console.Write(t.Result);
+        }
+        
+        [Test]
+        public void TestScrobble()
+        {
+            var client = _container.Resolve<LastFmClient>();
+
+            // Test non-english symbols
+            var t = client.SendScrobble( "DJ Krush", "若輩", 271)!;
+            
+            Assert.NotNull(t);
+            t!.Wait();
+            Assert.IsNotNull(t.IsCompletedSuccessfully);
+            Console.Write(t.Result.Scrobbles.Attribute.Accepted);
         }
     }
 

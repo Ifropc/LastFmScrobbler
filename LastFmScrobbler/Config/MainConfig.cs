@@ -20,6 +20,8 @@ namespace LastFmScrobbler.Config
 
         public virtual string? SessionKey { get; set; } = null;
 
+        public virtual int? SongScrobbleLength { get; set; } = 50;
+
         public bool IsAuthorized()
         {
             return SessionName is not null && SessionKey is not null;

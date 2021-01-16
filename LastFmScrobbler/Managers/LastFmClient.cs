@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using LastFmScrobbler.Config;
 using LastFmScrobbler.Utils;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SiraUtil;
 using SiraUtil.Tools;
 using Zenject;
 
@@ -20,12 +15,12 @@ namespace LastFmScrobbler.Managers
     {
         private const string ScrobblerBaseUrl = "http://ws.audioscrobbler.com/2.0/";
         private const string LastFmBaseUrl = "http://www.last.fm/api";
-
-        private HttpClient? _client;
         [Inject] private readonly MainConfig _config = null!;
         [Inject] private readonly ICredentialsLoader _credentialsLoader = null!;
         [Inject] private readonly ILinksOpener _linksOpener = null!;
         [Inject] private readonly SiraLog _log = null!;
+
+        private HttpClient? _client;
 
         private LastFmCredentials _credentials = null!;
 
@@ -81,15 +76,16 @@ namespace LastFmScrobbler.Managers
         }
 
         // Return object only for testing purpose 
-        public async Task<object> SendNowPlaying(string sessionKey, string artist, string track)
+        public async Task<object> SendNowPlaying(string artist, string track, int duration)
         {
             var parameters = new Dictionary<string, string>
             {
-                {"track", track},
-                {"artist", artist},
-                {"api_key", _credentials.Key},
                 {"method", "track.updateNowPlaying"},
-                {"sk", sessionKey}
+                {"artist", artist},
+                {"track", track},
+                {"duration ", duration.ToString()},
+                {"api_key", _credentials.Key},
+                {"sk", _config.SessionKey!}
             };
 
             var resp = await PostAsync(parameters);
@@ -97,6 +93,29 @@ namespace LastFmScrobbler.Managers
             _log.Debug($"Got response for update now request {resp}");
 
             return CheckError<object>(resp);
+        }
+
+        // Return object only for testing purpose 
+        public async Task<ScrobbleResponse> SendScrobble(string artist, string track, int duration)
+        {
+            var timestamp = DateTime.Now.ToUnixTime();
+
+            var parameters = new Dictionary<string, string>
+            {
+                {"method", "track.scrobble"},
+                {"artist", artist},
+                {"track", track},
+                {"timestamp", timestamp.ToString()},
+                {"duration ", duration.ToString()},
+                {"api_key", _credentials.Key},
+                {"sk", _config.SessionKey!}
+            };
+
+            var resp = await PostAsync(parameters);
+
+            _log.Debug($"Got response for scrobble request {resp}");
+
+            return CheckError<ScrobbleResponse>(resp);
         }
 
         private async Task<string> PostAsync(Dictionary<string, string> parameters)
