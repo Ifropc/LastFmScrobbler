@@ -72,7 +72,8 @@ namespace LastFmScrobbler.Managers
                 }
                 catch (Exception e)
                 {
-                    _log.Warning("Failed to send now playing");
+                    _log.Warning(
+                        $"Failed to send now playing: {_selected.songAuthorName} - {_selected.songAuthorName}");
                     _log.Warning(e);
                 }
             }
@@ -107,7 +108,7 @@ namespace LastFmScrobbler.Managers
             }
             catch (Exception e)
             {
-                _log.Warning("Failed to scrobble");
+                _log.Warning($"Failed to scrobble: {_selected.songAuthorName} - {_selected.songAuthorName}");
                 _log.Warning(e);
             }
         }

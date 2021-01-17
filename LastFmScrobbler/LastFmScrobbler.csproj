@@ -147,7 +147,9 @@
     <Compile Include="Managers\SongManager.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\ScrobblerConfigViewController.cs" />
+    <Compile Include="UI\AbstractView.cs" />
+    <Compile Include="UI\NotAuthorizedView.cs" />
+    <Compile Include="UI\ScrobblerConfigView.cs" />
     <Compile Include="UI\ScrobblerFlowCoordinator.cs" />
     <Compile Include="UI\MenuButtonHandler.cs" />
     <Compile Include="Utils\LastFmException.cs" />
@@ -158,6 +160,7 @@
     <EmbeddedResource Include="credentials.json" />
     <EmbeddedResource Include="manifest.json" />
     <EmbeddedResource Include="UI\Views\config-view.bsml" />
+    <EmbeddedResource Include="UI\Views\not-authorized-view.bsml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />

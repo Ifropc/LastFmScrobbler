@@ -4,9 +4,7 @@
     <vertical id="container-auth" bg="panel-top" bg-color="~auth-color" >
         <text text="~auth-text" align="Left"/>
 
-        <button id="button-auth" on-click="clicked-auth-button" text="Auth" interactable="false" pref-height="10"/>
-
-        <button id="button-confirm" on-click="clicked-confirm-button" text="Confirm" interactable="false"
-                hover-hint="Confirm your browser authorization" pref-height="10"/>
+        <button id="button-show-auth" on-click="clicked-show-auth-button" text="Settings"
+                hover-hint="Settings for your last.fm profile" pref-height="10"/>
     </vertical>
 </bg>

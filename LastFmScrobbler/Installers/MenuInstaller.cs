@@ -21,7 +21,8 @@ namespace LastFmScrobbler.Installers
 
         private void InstallUI()
         {
-            Container.BindViewController<ScrobblerConfigViewController>();
+            Container.BindViewController<ScrobblerConfigView>();
+            Container.BindViewController<NotAuthorizedView>();
             Container.BindFlowCoordinator<ScrobblerFlowCoordinator>();
             Container.BindInterfacesAndSelfTo<MenuButtonHandler>().AsSingle().NonLazy();
 
