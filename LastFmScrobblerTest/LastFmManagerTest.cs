@@ -47,6 +47,19 @@ namespace LastFmScrobblerTest
         }
 
         [Test]
+        public void TestCurrentlyPlayingUrlUnsafeSymbols()
+        {
+            var client = _container.Resolve<LastFmClient>();
+
+            var t = client.SendNowPlaying("t+pazolite", "trick or die?", 510)!;
+
+            Assert.NotNull(t);
+            t!.Wait();
+            Assert.IsNotNull(t.IsCompletedSuccessfully);
+            Console.Write(t.Result);
+        }
+
+        [Test]
         public void TestScrobble()
         {
             var client = _container.Resolve<LastFmClient>();

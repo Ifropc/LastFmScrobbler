@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -83,7 +84,7 @@ namespace LastFmScrobbler.Managers
                 {"method", "track.updateNowPlaying"},
                 {"artist", artist},
                 {"track", track},
-                {"duration ", duration.ToString()},
+                {"duration", duration.ToString()},
                 {"api_key", _credentials.Key},
                 {"sk", _config.SessionKey!}
             };
@@ -106,7 +107,7 @@ namespace LastFmScrobbler.Managers
                 {"artist", artist},
                 {"track", track},
                 {"timestamp", timestamp.ToString()},
-                {"duration ", duration.ToString()},
+                {"duration", duration.ToString()},
                 {"api_key", _credentials.Key},
                 {"sk", _config.SessionKey!}
             };

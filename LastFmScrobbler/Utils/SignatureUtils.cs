@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -12,7 +13,8 @@ namespace LastFmScrobbler.Utils
         {
             var builder = new StringBuilder();
 
-            foreach (var (key, value) in parameters) builder.Append(key).Append('=').Append(value).Append('&');
+            foreach (var (key, value) in parameters)
+                builder.Append(key).Append('=').Append(WebUtility.UrlEncode(value)).Append('&');
 
             string signature = Sign(parameters, secret);
 
