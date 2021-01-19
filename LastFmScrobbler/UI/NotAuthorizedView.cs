@@ -13,6 +13,8 @@ namespace LastFmScrobbler.UI
     [HotReload(RelativePathToLayout = @"\Views\not-authorized-view.bsml")]
     public class NotAuthorizedView : AbstractView
     {
+        public event Action? ActionFinished;
+        
         [UIComponent("button-auth")] public Button authButton;
         [UIComponent("button-confirm")] private Button _confirmButton;
 
@@ -42,8 +44,9 @@ namespace LastFmScrobbler.UI
         {
             _config.SessionKey = authSession.Key;
             _config.SessionName = authSession.Name;
-            _log.Debug($"Auth confirmed for {authSession.Name}");
             _configView.Authorized = true;
+            _log.Debug($"Auth confirmed for {authSession.Name}");
+            ActionFinished?.Invoke();
         }
     }
 }

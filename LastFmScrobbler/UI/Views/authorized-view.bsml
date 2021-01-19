@@ -2,9 +2,7 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd">
 
+    <text text="~auth-info" align="Center"/>
 
-    <button id="button-auth" on-click="clicked-auth-button" text="Auth" pref-height="10"/>
-
-    <button id="button-confirm" on-click="clicked-confirm-button" text="Confirm" interactable="false"
-            hover-hint="Confirm your browser authorization" pref-height="10"/>
+    <button id="button-logout" on-click="clicked-logout-button" text="Logout" pref-height="10"/>
 </vertical>

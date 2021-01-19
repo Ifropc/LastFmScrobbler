@@ -11,7 +11,7 @@ namespace LastFmScrobbler.UI
     [HotReload(RelativePathToLayout = @"\Views\config-view.bsml")]
     public class ScrobblerConfigView : AbstractView
     {
-        public event Action<bool>? AuthClicked = null;
+        public event Action<bool>? AuthClicked;
 
         [Inject] private readonly MainConfig _config = null!;
         [Inject] private readonly LastFmClient _lastFmClient = null!;
@@ -32,7 +32,7 @@ namespace LastFmScrobbler.UI
         }
 
         [UIValue("auth-text")] public string AuthText => Authorized ? "Authorized" : "Not authorized";
-        [UIValue("auth-color")] public string AuthColor => Authorized ? "#baf2bb" : "#BD288199";
+        [UIValue("auth-color")] public string AuthColor => Authorized ? "#018b01" : "#8b0101";
 
         public async void Initialize()
         {
@@ -57,7 +57,6 @@ namespace LastFmScrobbler.UI
 
         private void ConsumeToken(string token)
         {
-            _notAuthorizedView.authButton.interactable = true;
             _notAuthorizedView.token = token;
         }
     }
