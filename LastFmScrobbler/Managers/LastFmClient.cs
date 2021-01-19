@@ -36,7 +36,7 @@ namespace LastFmScrobbler.Managers
             if (!_config.IsAuthorized()) AuthTokenTask = GetToken();
         }
 
-        private async Task<string> GetToken()
+        public async Task<string> GetToken()
         {
             _log.Debug("Sending token request");
 

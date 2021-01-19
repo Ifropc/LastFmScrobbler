@@ -14,7 +14,7 @@ namespace LastFmScrobbler.UI
     public class NotAuthorizedView : AbstractView
     {
         public event Action? ActionFinished;
-        
+
         [UIComponent("button-auth")] public Button authButton;
         [UIComponent("button-confirm")] private Button _confirmButton;
 
@@ -22,14 +22,28 @@ namespace LastFmScrobbler.UI
         [Inject] private readonly ScrobblerConfigView _configView = null!;
         [Inject] private readonly LastFmClient _lastFmClient = null!;
 
-        public string token = null!;
+        public string? token;
 
         [UIAction("clicked-auth-button")]
         protected void ClickedAuth()
         {
-            _lastFmClient.Authorize(token);
-            _confirmButton.interactable = true;
             authButton.interactable = false;
+            
+            if (token == null)
+            {
+                SafeAwait(_lastFmClient.GetToken(), Authorize, () => authButton.interactable = true);
+            }
+            else
+            {
+                Authorize(token);
+            }
+        }
+
+        private void Authorize(string authToken)
+        {
+            token = authToken;
+            _lastFmClient.Authorize(authToken);
+            _confirmButton.interactable = true;
         }
 
         [UIAction("clicked-confirm-button")]
@@ -37,7 +51,9 @@ namespace LastFmScrobbler.UI
         {
             _confirmButton.interactable = false;
 
-            SafeAwait(_lastFmClient.GetSession(token), SessionAuthorized, () => authButton.interactable = true);
+            SafeAwait(_lastFmClient.GetSession(token!), SessionAuthorized);
+
+            authButton.interactable = true;
         }
 
         private void SessionAuthorized(AuthSession authSession)
@@ -45,6 +61,7 @@ namespace LastFmScrobbler.UI
             _config.SessionKey = authSession.Key;
             _config.SessionName = authSession.Name;
             _configView.Authorized = true;
+            token = null;
             _log.Debug($"Auth confirmed for {authSession.Name}");
             ActionFinished?.Invoke();
         }

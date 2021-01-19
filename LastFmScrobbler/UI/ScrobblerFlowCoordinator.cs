@@ -44,7 +44,6 @@ namespace LastFmScrobbler.UI
 
         protected override void BackButtonWasPressed(ViewController _)
         {
-            // TODO: Remove?
             if (_restartRequired)
             {
                 _restartRequired = false;

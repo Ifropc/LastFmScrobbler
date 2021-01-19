@@ -1,10 +1,16 @@
 ﻿<vertical horizontal-fit="PreferredSize" vertical-fit="PreferredSize"
+          anchor-pos-x="50" pref-width="60" spacing="2" pad="2"
+          bg="round-rect-panel"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd">
 
+    <text text="To authorize you need to click Auth button. It will open new tab, displaying last.fm application connect form. After allowing access on the site, return back to Beat Saber and click Confirm button. "
+          word-wrapping="true" align="Center"/>
 
-    <button id="button-auth" on-click="clicked-auth-button" text="Auth" pref-height="10"/>
+    <horizontal spacing="4">
+        <button id="button-auth" on-click="clicked-auth-button" text="Auth" pref-height="10"/>
 
-    <button id="button-confirm" on-click="clicked-confirm-button" text="Confirm" interactable="false"
-            hover-hint="Confirm your browser authorization" pref-height="10"/>
+        <button id="button-confirm" on-click="clicked-confirm-button" text="Confirm" interactable="false"
+                hover-hint="Confirm your browser authorization" pref-height="10"/>
+    </horizontal>
 </vertical>

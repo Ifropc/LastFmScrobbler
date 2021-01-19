@@ -1,8 +1,11 @@
 ﻿<vertical horizontal-fit="PreferredSize" vertical-fit="PreferredSize"
+          anchor-pos-x="50" pref-width="60" spacing="2" pad="2"
+          bg="round-rect-panel"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd">
 
-    <text text="~auth-info" align="Center"/>
+    <text text="Logging out will end your current session."
+          word-wrapping="true" align="Center"/>
 
     <button id="button-logout" on-click="clicked-logout-button" text="Logout" pref-height="10"/>
 </vertical>

@@ -31,7 +31,9 @@ namespace LastFmScrobbler.UI
             }
         }
 
-        [UIValue("auth-text")] public string AuthText => Authorized ? "Authorized" : "Not authorized";
+        [UIValue("auth-text")]
+        public string AuthText => Authorized ? $"Logged in as {_config.SessionName}" : "Not authorized";
+
         [UIValue("auth-color")] public string AuthColor => Authorized ? "#018b01" : "#8b0101";
 
         public async void Initialize()

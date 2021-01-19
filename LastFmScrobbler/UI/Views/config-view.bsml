@@ -1,10 +1,27 @@
 ﻿<bg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd">
 
-    <vertical id="container-auth" bg="panel-top" bg-color="~auth-color" >
-        <text text="~auth-text" align="Left"/>
+    <horizontal anchor-pos-y="21">
+        <vertical id="container-auth" bg="round-rect-panel" bg-color="~auth-color"
+                  pref-width="80" pad="2">
+            <text text="~auth-text" align="Center"/>
 
-        <button id="button-show-auth" on-click="clicked-show-auth-button" text="Settings"
-                hover-hint="Settings for your last.fm profile" pref-height="10"/>
-    </vertical>
+            <button id="button-show-auth" on-click="clicked-show-auth-button" text="Settings"
+                    hover-hint="Settings for your last.fm profile"/>
+        </vertical>
+    </horizontal>
+
+    <horizontal>
+        <vertical bg="round-rect-panel" pad="2" pref-width="80" spacing="2">
+            <toggle-setting text="Enable scrobbling"/>
+            <slider-setting text="Scrobble percentage" min="50" max="100"
+                            hover-hint="Percentage of track duration at which track should be scrobbled"/>
+        </vertical>
+    </horizontal>
+
+    <horizontal  anchor-pos-y="-18">
+        <vertical bg="round-rect-panel" pad="2" pref-width="80" spacing="2">
+            <button text="github"/>
+        </vertical>
+    </horizontal>
 </bg>
