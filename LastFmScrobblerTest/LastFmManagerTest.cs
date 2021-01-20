@@ -23,8 +23,10 @@ namespace LastFmScrobblerTest
         [Test]
         public void TestAuthorize()
         {
+            _container.Resolve<MainConfig>().SessionKey = null;
             var client = _container.Resolve<LastFmClient>();
-
+            client.Initialize();
+            
             var t = client.AuthTokenTask!;
 
             Assert.NotNull(t);

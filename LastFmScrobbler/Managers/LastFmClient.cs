@@ -14,8 +14,8 @@ namespace LastFmScrobbler.Managers
 {
     public class LastFmClient : IInitializable
     {
-        private const string ScrobblerBaseUrl = "http://ws.audioscrobbler.com/2.0/";
-        private const string LastFmBaseUrl = "http://www.last.fm/api";
+        private const string ScrobblerBaseUrl = "https://ws.audioscrobbler.com/2.0/";
+        private const string LastFmBaseUrl = "https://www.last.fm/api";
         [Inject] private readonly MainConfig _config = null!;
         [Inject] private readonly ICredentialsLoader _credentialsLoader = null!;
         [Inject] private readonly ILinksOpener _linksOpener = null!;
