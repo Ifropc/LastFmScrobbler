@@ -14,48 +14,48 @@ namespace LastFmScrobbler.UI
     {
         public event Action? ActionFinished;
 
-        [UIComponent("button-auth")] public Button authButton;
-        [UIComponent("button-confirm")] private Button _confirmButton;
+        [UIComponent("button-auth")] public Button authButton = null!;
+        [UIComponent("button-confirm")] public Button confirmButton = null!;
 
         [Inject] private readonly MainConfig _config = null!;
         [Inject] private readonly ScrobblerConfigView _configView = null!;
         [Inject] private readonly LastFmClient _lastFmClient = null!;
 
-        public string? token;
+        private string? _token;
 
         [UIAction("clicked-auth-button")]
         protected void ClickedAuth()
         {
             authButton.interactable = false;
 
-            if (token == null)
+            if (_token == null)
             {
                 SafeAwait(_lastFmClient.GetToken(), Authorize, () => authButton.interactable = true);
             }
             else
             {
-                Authorize(token);
+                Authorize(_token);
             }
         }
 
         private void Authorize(string authToken)
         {
             authButton.interactable = true;
-            token = authToken;
+            _token = authToken;
             ShowInfoModal(() =>
             {
                 authButton.interactable = false;
                 _lastFmClient.Authorize(authToken);
-                _confirmButton.interactable = true;
+                confirmButton.interactable = true;
             });
         }
 
         [UIAction("clicked-confirm-button")]
         protected void ClickedConfirm()
         {
-            _confirmButton.interactable = false;
+            confirmButton.interactable = false;
 
-            SafeAwait(_lastFmClient.GetSession(token!), SessionAuthorized);
+            SafeAwait(_lastFmClient.GetSession(_token!), SessionAuthorized);
 
             authButton.interactable = true;
         }
@@ -65,7 +65,7 @@ namespace LastFmScrobbler.UI
             _config.SessionKey = authSession.Key;
             _config.SessionName = authSession.Name;
             _configView.Authorized = true;
-            token = null;
+            _token = null;
             _log.Debug($"Auth confirmed for {authSession.Name}");
             ActionFinished?.Invoke();
         }

@@ -15,24 +15,20 @@ namespace LastFmScrobbler.Managers
     {
         private const string ScrobblerBaseUrl = "https://ws.audioscrobbler.com/2.0/";
         private const string LastFmBaseUrl = "https://www.last.fm/api";
+        
         [Inject] private readonly MainConfig _config = null!;
         [Inject] private readonly ICredentialsLoader _credentialsLoader = null!;
         [Inject] private readonly ILinksOpener _linksOpener = null!;
         [Inject] private readonly SiraLog _log = null!;
 
         private HttpClient? _client;
-
         private LastFmCredentials _credentials = null!;
-
-        public Task<string>? AuthTokenTask { get; private set; }
 
         public void Initialize()
         {
             _client ??= new HttpClient();
 
             _credentials = _credentialsLoader.LoadCredentials();
-
-            if (!_config.IsAuthorized()) AuthTokenTask = GetToken();
         }
 
         public async Task<string> GetToken()

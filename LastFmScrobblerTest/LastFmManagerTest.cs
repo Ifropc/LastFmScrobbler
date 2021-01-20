@@ -27,7 +27,7 @@ namespace LastFmScrobblerTest
             var client = _container.Resolve<LastFmClient>();
             client.Initialize();
             
-            var t = client.AuthTokenTask!;
+            var t = client.GetToken()!;
 
             Assert.NotNull(t);
             t!.Wait();
@@ -92,7 +92,7 @@ namespace LastFmScrobblerTest
         {
             var client = _container.Resolve<LastFmClient>();
 
-            var t = client.AuthTokenTask;
+            var t = client.GetToken();
 
             Assert.NotNull(t);
             Assert.Throws<AggregateException>(t!.Wait);

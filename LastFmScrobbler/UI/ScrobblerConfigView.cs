@@ -2,7 +2,6 @@
 using BeatSaberMarkupLanguage.Attributes;
 using LastFmScrobbler.Config;
 using LastFmScrobbler.Managers;
-using SiraUtil;
 using Zenject;
 
 namespace LastFmScrobbler.UI
@@ -14,11 +13,10 @@ namespace LastFmScrobbler.UI
         public event Action<bool>? AuthClicked;
 
         [Inject] private readonly MainConfig _config = null!;
-        [Inject] private readonly LastFmClient _lastFmClient = null!;
-        [Inject] private readonly NotAuthorizedView _notAuthorizedView = null!;
         [Inject] private readonly ILinksOpener _linksOpener = null!;
 
         private bool _authorized;
+
         [UIValue("authorized")]
         public bool Authorized
         {
@@ -31,19 +29,32 @@ namespace LastFmScrobbler.UI
                 NotifyPropertyChanged(nameof(AuthColor));
             }
         }
-        
+
         [UIValue("scrobble-enable")]
         public bool ScrobbleEnabled
         {
             get => _config.ScrobbleEnabled;
-            set => _config.ScrobbleEnabled = value;
+            set
+            {
+                // Without it BSML initialization would trigger _restartRequired and I don't want it.
+                if (_config.ScrobbleEnabled != value)
+                {
+                    _config.ScrobbleEnabled = value;
+                }
+            }
         }
-        
+
         [UIValue("scrobble-percentage")]
         public int ScrobblePercentage
         {
             get => _config.SongScrobbleLength;
-            set => _config.SongScrobbleLength = value;
+            set
+            {
+                if (_config.SongScrobbleLength != value)
+                {
+                    _config.SongScrobbleLength = value;
+                }
+            }
         }
 
         [UIValue("auth-text")]
@@ -51,18 +62,9 @@ namespace LastFmScrobbler.UI
 
         [UIValue("auth-color")] public string AuthColor => Authorized ? "#018b01" : "#8b0101";
 
-        public async void Initialize()
+        public void Initialize()
         {
             Authorized = _config.IsAuthorized();
-
-            if (_lastFmClient.AuthTokenTask == null) return;
-
-            // Wait for 3 PauseChamps and BSML
-            await Utilities.PauseChamp;
-            await Utilities.PauseChamp;
-            await Utilities.PauseChamp;
-
-            SafeAwait(_lastFmClient.AuthTokenTask, ConsumeToken);
         }
 
         [UIAction("clicked-show-auth-button")]
@@ -71,16 +73,11 @@ namespace LastFmScrobbler.UI
             _log.Debug("Auth clicked");
             AuthClicked?.Invoke(Authorized);
         }
-        
+
         [UIAction("clicked-github")]
         protected void ClickedGithub()
         {
             ShowInfoModal(() => _linksOpener.OpenLink("https://github.com/Ifropc/LastFmScrobbler"));
-        }
-
-        private void ConsumeToken(string token)
-        {
-            _notAuthorizedView.token = token;
         }
     }
 }
