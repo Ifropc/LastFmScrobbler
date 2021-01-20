@@ -8,4 +8,19 @@
           word-wrapping="true" align="Center"/>
 
     <button id="button-logout" on-click="clicked-logout-button" text="Logout" pref-height="10"/>
+
+    <!--    Error modal start-->
+    <modal size-delta-x="50" size-delta-y="50" show-event="show-error-modal" hide-event="hide-error-modal"
+           clickerino-offerino-closerino="true">
+        <vertical pad="2" spacing="2" bg="round-rect-panel">
+            <horizontal pref-width="70">
+                <text align="Center" word-wrapping="true"
+                      text="~error-modal-text"/>
+            </horizontal>
+            <horizontal spacing="2" pref-height="10">
+                <button text="Ok" pref-width="15" event-click="hide-error-modal"/>
+            </horizontal>
+        </vertical>
+    </modal>
+    <!--    Error modal end-->
 </vertical>

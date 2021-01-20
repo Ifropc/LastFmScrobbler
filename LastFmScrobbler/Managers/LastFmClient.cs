@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +41,9 @@ namespace LastFmScrobbler.Managers
 
             var url = $"{ScrobblerBaseUrl}?method=auth.gettoken&api_key={_credentials.Key}&format=json";
 
-            var resp = await _client!.GetStringAsync(url);
+            var httpResponse = await _client!.GetAsync(url);
+
+            var resp = await httpResponse.Content.ReadAsStringAsync();
 
             _log.Debug("Got response for token request");
 
@@ -69,7 +70,9 @@ namespace LastFmScrobbler.Managers
 
             var url = $"{ScrobblerBaseUrl}?{SignatureUtils.SignedParams(parameters, _credentials.Secret)}";
 
-            var resp = await _client!.GetStringAsync(url);
+            var httpResponse = await _client!.GetAsync(url);
+
+            var resp = await httpResponse.Content.ReadAsStringAsync();
 
             _log.Debug($"Got response for auth request {resp}");
 

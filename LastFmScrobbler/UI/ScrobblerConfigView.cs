@@ -16,6 +16,7 @@ namespace LastFmScrobbler.UI
         [Inject] private readonly MainConfig _config = null!;
         [Inject] private readonly LastFmClient _lastFmClient = null!;
         [Inject] private readonly NotAuthorizedView _notAuthorizedView = null!;
+        [Inject] private readonly ILinksOpener _linksOpener = null!;
 
         private bool _authorized;
         [UIValue("authorized")]
@@ -29,6 +30,20 @@ namespace LastFmScrobbler.UI
                 NotifyPropertyChanged(nameof(AuthText));
                 NotifyPropertyChanged(nameof(AuthColor));
             }
+        }
+        
+        [UIValue("scrobble-enable")]
+        public bool ScrobbleEnabled
+        {
+            get => _config.ScrobbleEnabled;
+            set => _config.ScrobbleEnabled = value;
+        }
+        
+        [UIValue("scrobble-percentage")]
+        public int ScrobblePercentage
+        {
+            get => _config.SongScrobbleLength;
+            set => _config.SongScrobbleLength = value;
         }
 
         [UIValue("auth-text")]
@@ -55,6 +70,12 @@ namespace LastFmScrobbler.UI
         {
             _log.Debug("Auth clicked");
             AuthClicked?.Invoke(Authorized);
+        }
+        
+        [UIAction("clicked-github")]
+        protected void ClickedGithub()
+        {
+            ShowInfoModal(() => _linksOpener.OpenLink("https://github.com/Ifropc/LastFmScrobbler"));
         }
 
         private void ConsumeToken(string token)

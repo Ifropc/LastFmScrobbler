@@ -6,22 +6,52 @@
                   pref-width="80" pad="2">
             <text text="~auth-text" align="Center"/>
 
-            <button id="button-show-auth" on-click="clicked-show-auth-button" text="Settings"
+            <button id="button-show-auth" on-click="clicked-show-auth-button" text="Settings" pref-width="20"
                     hover-hint="Settings for your last.fm profile"/>
         </vertical>
     </horizontal>
 
     <horizontal>
         <vertical bg="round-rect-panel" pad="2" pref-width="80" spacing="2">
-            <toggle-setting text="Enable scrobbling"/>
-            <slider-setting text="Scrobble percentage" min="50" max="100"
+            <toggle-setting text="Enable scrobbling" value="scrobble-enable" apply-on-change="true"/>
+            <slider-setting text="Scrobble percentage" min="50" max="100" increment="1" integer-only="true"
+                            value="scrobble-percentage" apply-on-change="true"
                             hover-hint="Percentage of track duration at which track should be scrobbled"/>
         </vertical>
     </horizontal>
 
-    <horizontal  anchor-pos-y="-18">
+    <horizontal anchor-pos-y="-18">
         <vertical bg="round-rect-panel" pad="2" pref-width="80" spacing="2">
-            <button text="github"/>
+            <button text="github" on-click="clicked-github" pref-width="20"/>
         </vertical>
     </horizontal>
+
+    <!--    Info and error modals start-->
+    <modal size-delta-x="50" size-delta-y="50" show-event="show-error-modal" hide-event="hide-error-modal"
+           clickerino-offerino-closerino="true">
+        <vertical pad="2" spacing="2" bg="round-rect-panel">
+            <horizontal pref-width="70">
+                <text align="Center" word-wrapping="true"
+                      text="~error-modal-text"/>
+            </horizontal>
+            <horizontal spacing="2" pref-height="10">
+                <button text="Ok" pref-width="15" event-click="hide-error-modal"/>
+            </horizontal>
+        </vertical>
+    </modal>
+
+    <modal size-delta-x="50" size-delta-y="35" show-event="show-info-modal" hide-event="hide-info-modal"
+           clickerino-offerino-closerino="true">
+        <vertical pad="2" spacing="2">
+            <horizontal pref-height="20" pref-width="40">
+                <text align="Center" word-wrapping="true"
+                      text="This will open a link in your default browser, do you want to continue?"/>
+            </horizontal>
+            <horizontal spacing="2" pref-height="10">
+                <button text="Yes" pref-width="15" on-click="info-modal-confirm"/>
+                <button text="No" pref-width="15" event-click="hide-info-modal"/>
+            </horizontal>
+        </vertical>
+    </modal>
+    <!--    Info and error modals end-->
 </bg>

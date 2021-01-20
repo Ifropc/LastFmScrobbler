@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using LastFmScrobbler.Config;
 using LastFmScrobbler.Managers;
@@ -28,7 +27,7 @@ namespace LastFmScrobbler.UI
         protected void ClickedAuth()
         {
             authButton.interactable = false;
-            
+
             if (token == null)
             {
                 SafeAwait(_lastFmClient.GetToken(), Authorize, () => authButton.interactable = true);
@@ -41,9 +40,14 @@ namespace LastFmScrobbler.UI
 
         private void Authorize(string authToken)
         {
+            authButton.interactable = true;
             token = authToken;
-            _lastFmClient.Authorize(authToken);
-            _confirmButton.interactable = true;
+            ShowInfoModal(() =>
+            {
+                authButton.interactable = false;
+                _lastFmClient.Authorize(authToken);
+                _confirmButton.interactable = true;
+            });
         }
 
         [UIAction("clicked-confirm-button")]

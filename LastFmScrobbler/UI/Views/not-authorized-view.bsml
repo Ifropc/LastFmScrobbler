@@ -13,4 +13,33 @@
         <button id="button-confirm" on-click="clicked-confirm-button" text="Confirm" interactable="false"
                 hover-hint="Confirm your browser authorization" pref-height="10"/>
     </horizontal>
+
+    <!--    Info and error modals start-->
+    <modal size-delta-x="50" size-delta-y="50" show-event="show-error-modal" hide-event="hide-error-modal"
+           clickerino-offerino-closerino="true">
+        <vertical pad="2" spacing="2" bg="round-rect-panel">
+            <horizontal pref-width="70">
+                <text align="Center" word-wrapping="true"
+                      text="~error-modal-text"/>
+            </horizontal>
+            <horizontal spacing="2" pref-height="10">
+                <button text="Ok" pref-width="15" event-click="hide-error-modal"/>
+            </horizontal>
+        </vertical>
+    </modal>
+
+    <modal size-delta-x="50" size-delta-y="35" show-event="show-info-modal" hide-event="hide-info-modal"
+           clickerino-offerino-closerino="true">
+        <vertical pad="2" spacing="2">
+            <horizontal pref-height="20" pref-width="40">
+                <text align="Center" word-wrapping="true"
+                      text="This will open a link in your default browser, do you want to continue?"/>
+            </horizontal>
+            <horizontal spacing="2" pref-height="10">
+                <button text="Yes" pref-width="15" on-click="info-modal-confirm"/>
+                <button text="No" pref-width="15" event-click="hide-info-modal"/>
+            </horizontal>
+        </vertical>
+    </modal>
+    <!--    Info and error modals end-->
 </vertical>

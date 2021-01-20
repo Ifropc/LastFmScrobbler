@@ -7,25 +7,22 @@ namespace LastFmScrobbler.Utils
         private const int NotAuthToken = 14;
         private const int ServiceOffline = 11;
         private const int ServerError = 16;
-        public readonly int? ErrorCode;
+        private readonly int? _errorCode;
 
-        public readonly string Message;
-
-        public LastFmException(string message, int? errorCode = null)
+        public LastFmException(string message, int? errorCode = null) : base(message)
         {
-            Message = message;
-            ErrorCode = errorCode;
+            _errorCode = errorCode;
         }
 
         public bool ShouldBeReported()
         {
-            return ErrorCode == null ||
-                   ErrorCode != NotAuthToken && ErrorCode != ServerError && ErrorCode != ServiceOffline;
+            return _errorCode == null ||
+                   _errorCode != NotAuthToken && _errorCode != ServerError && _errorCode != ServiceOffline;
         }
 
         public bool TokenNotAuthorized()
         {
-            return ErrorCode == NotAuthToken;
+            return _errorCode == NotAuthToken;
         }
     }
 }
