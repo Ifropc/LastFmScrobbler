@@ -12,7 +12,7 @@
     </horizontal>
 
     <horizontal>
-        <vertical bg="round-rect-panel" pad="2" pref-width="80" spacing="2">
+        <vertical bg="round-rect-panel" pad="2" pref-width="80" spacing="2" bg-color="#8a6fdf">
             <toggle-setting text="Enable scrobbling" value="scrobble-enable" apply-on-change="true"/>
             <slider-setting text="Scrobble percentage" min="50" max="100" increment="1" integer-only="true"
                             value="scrobble-percentage" apply-on-change="true"
@@ -21,7 +21,7 @@
     </horizontal>
 
     <horizontal anchor-pos-y="-18">
-        <vertical bg="round-rect-panel" pad="2" pref-width="80" spacing="2">
+        <vertical bg="round-rect-panel" pad="2" pref-width="80" spacing="2" bg-color="#54086b">
             <button text="github" on-click="clicked-github" pref-width="20"/>
         </vertical>
     </horizontal>
@@ -29,7 +29,7 @@
     <!--    Info and error modals start-->
     <modal size-delta-x="50" size-delta-y="50" show-event="show-error-modal" hide-event="hide-error-modal"
            clickerino-offerino-closerino="true">
-        <vertical pad="2" spacing="2" bg="round-rect-panel">
+        <vertical pad="2" spacing="2" bg="round-rect-panel" bg-color="#c60f0f">
             <horizontal pref-width="70">
                 <text align="Center" word-wrapping="true"
                       text="~error-modal-text"/>

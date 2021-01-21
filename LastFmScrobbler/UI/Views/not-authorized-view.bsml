@@ -1,6 +1,6 @@
 ﻿<vertical horizontal-fit="PreferredSize" vertical-fit="PreferredSize"
           anchor-pos-x="50" pref-width="60" spacing="2" pad="2"
-          bg="round-rect-panel"
+          bg="round-rect-panel" bg-color="#b637fb"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd">
 
@@ -17,7 +17,7 @@
     <!--    Info and error modals start-->
     <modal size-delta-x="50" size-delta-y="50" show-event="show-error-modal" hide-event="hide-error-modal"
            clickerino-offerino-closerino="true">
-        <vertical pad="2" spacing="2" bg="round-rect-panel">
+        <vertical pad="2" spacing="2" bg="round-rect-panel" bg-color="#c60f0f">
             <horizontal pref-width="70">
                 <text align="Center" word-wrapping="true"
                       text="~error-modal-text"/>
