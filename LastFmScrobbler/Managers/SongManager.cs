@@ -16,7 +16,6 @@ namespace LastFmScrobbler.Managers
         [Inject] private readonly LastFmMenuTransitionHelper _transitionHelper = null!;
 
         private Action<LevelCollectionViewController, IPreviewBeatmapLevel> _eventSelectedAction = null!;
-
         private IPreviewBeatmapLevel _selected = null!;
         private CurrentSongData? _songData;
 

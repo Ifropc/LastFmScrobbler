@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("LastFmScrobbler")]
-[assembly: AssemblyDescription("Lastf scrobbler for Beat Saber")]
+[assembly: AssemblyDescription("Last.fm scrobbler for Beat Saber")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("LastFmScrobbler")]
@@ -14,5 +14,5 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("e8ea7eed-a4cb-4105-931f-ab1d15c3dbcc")]
 
-[assembly: AssemblyVersion("0.0.1")]
-[assembly: AssemblyFileVersion("0.0.1")]
+[assembly: AssemblyVersion("1.0.0")]
+[assembly: AssemblyFileVersion("1.0.0")]

@@ -15,7 +15,7 @@ namespace LastFmScrobbler.UI
 
         [UIParams] protected BSMLParserParams _parserParams = null!;
 
-        private string _errorModalText;
+        private string _errorModalText = "Unknown error";
         [UIValue("error-modal-text")]
         protected string ErrorModalText
         {

@@ -1,6 +1,4 @@
-﻿using System;
-using HarmonyLib;
-using IPA;
+﻿using IPA;
 using IPA.Config.Stores;
 using IPA.Loader;
 using IPA.Logging;
@@ -14,18 +12,12 @@ namespace LastFmScrobbler
     [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin
     {
-        private const string HarmonyID = "com.github.ifropc.BSLastFmScrobbler";
-
-        // TODO: remove if not used
-        private readonly Harmony _harmony;
-
         private readonly Logger _log;
 
         [Init]
         public Plugin(IPAConfig cfg, Logger log, Zenjector injector, PluginMetadata metadata)
         {
             _log = log;
-            _harmony = new Harmony(HarmonyID);
 
             var config = cfg.Generated<MainConfig>();
             config.Version = metadata.Version;
@@ -41,34 +33,10 @@ namespace LastFmScrobbler
             _log.Debug("Finished plugin initialization");
         }
 
-        #region Disableable
-
         [OnEnable]
-        public void OnEnable()
-        {
-            try
-            {
-                _harmony.PatchAll();
-            }
-            catch (Exception e)
-            {
-                _log.Critical(e);
-            }
-        }
-
         [OnDisable]
-        public void OnDisable()
+        public void Nop()
         {
-            try
-            {
-                _harmony.UnpatchAll(HarmonyID);
-            }
-            catch (Exception e)
-            {
-                _log.Critical(e);
-            }
         }
-
-        #endregion
     }
 }
