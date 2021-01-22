@@ -64,11 +64,14 @@ namespace LastFmScrobbler.Managers
             {
                 try
                 {
-                    await _client.SendNowPlaying(
-                        _selected.songAuthorName,
-                        _selected.songName,
-                        _selected.songDuration.Seconds()
-                    );
+                    if (_config.NowPlayingEnabled)
+                    {
+                        await _client.SendNowPlaying(
+                            _selected.songAuthorName,
+                            _selected.songName,
+                            _selected.songDuration.Seconds()
+                        );
+                    }
                 }
                 catch (Exception e)
                 {
