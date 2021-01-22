@@ -75,7 +75,7 @@
       <HintPath>$(BeatSaberDir)\Libs\SemVer.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="SiraUtil, Version=2.3.1.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="SiraUtil">
       <HintPath>$(BeatSaberDir)\Plugins\SiraUtil.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
