@@ -43,6 +43,19 @@ namespace LastFmScrobbler.UI
                 }
             }
         }
+        
+        [UIValue("now-playing-enable")]
+        public bool NowPlayingEnabled
+        {
+            get => _config.NowPlayingEnabled;
+            set
+            {
+                if (_config.NowPlayingEnabled != value)
+                {
+                    _config.NowPlayingEnabled = value;
+                }
+            }
+        }
 
         [UIValue("scrobble-percentage")]
         public int ScrobblePercentage

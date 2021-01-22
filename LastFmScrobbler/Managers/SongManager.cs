@@ -53,6 +53,7 @@ namespace LastFmScrobbler.Managers
         private async void OnLevelStarted(float offset)
         {
             var shouldBeScrobbled = _selected.songDuration.TotalSeconds() > 30;
+            var time = DateTime.Now.ToUnixTime();
 
             if (string.IsNullOrEmpty(_selected.songAuthorName))
             {
@@ -77,7 +78,7 @@ namespace LastFmScrobbler.Managers
                 }
             }
 
-            _songData = new CurrentSongData(offset, shouldBeScrobbled);
+            _songData = new CurrentSongData(offset, shouldBeScrobbled, time);
         }
 
         private async void OnLevelFinished(LevelCompletionResults results)
@@ -99,11 +100,19 @@ namespace LastFmScrobbler.Managers
 
             try
             {
-                await _client.SendScrobble(
+                var res = await _client.SendScrobble(
                     _selected.songAuthorName,
                     _selected.songName,
-                    _selected.songDuration.Seconds()
+                    _selected.songDuration.Seconds(),
+                    toScrobble.StartTimestamp
                 );
+
+                if (res.Scrobbles.Attribute.Accepted != 1)
+                {
+                    var ignoredMessage = res.Scrobbles.Data.IgnoredMessage;
+                    _log.Warning($"Scrobble was rejected with code: {ignoredMessage.Code}, message: {ignoredMessage.Text}");
+                    // TODO: cache failing scrobbles and re-submit them later 
+                }
             }
             catch (Exception e)
             {
@@ -116,10 +125,12 @@ namespace LastFmScrobbler.Managers
         {
             internal readonly float Offset;
             internal readonly bool ShouldBeScrobbled;
+            internal readonly long StartTimestamp;
 
-            internal CurrentSongData(float offset, bool shouldBeScrobbled)
+            internal CurrentSongData(float offset, bool shouldBeScrobbled, long startTimestamp)
             {
                 ShouldBeScrobbled = shouldBeScrobbled;
+                StartTimestamp = startTimestamp;
                 Offset = offset;
             }
         }

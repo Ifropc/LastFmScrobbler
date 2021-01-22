@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace LastFmScrobbler.Utils
 {
@@ -45,6 +46,15 @@ namespace LastFmScrobbler.Utils
 
     public class ScrobbleData
     {
-        // Nothing to use for now
+        [JsonProperty(PropertyName = "ignoredMessage")]
+        public IgnoredMessage IgnoredMessage { get; set; }
+    }
+    
+    public class IgnoredMessage {
+        [JsonProperty(PropertyName = "code")]
+        public int Code { get; set; }
+        
+        [JsonProperty(PropertyName = "#text")]
+        public string Text { get; set; }
     }
 }

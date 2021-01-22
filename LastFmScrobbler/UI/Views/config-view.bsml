@@ -1,7 +1,7 @@
 ﻿<bg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd">
 
-    <horizontal anchor-pos-y="21">
+    <horizontal anchor-pos-y="25">
         <vertical id="container-auth" bg="round-rect-panel" bg-color="~auth-color"
                   pref-width="80" pad="2">
             <text text="~auth-text" align="Center"/>
@@ -14,13 +14,14 @@
     <horizontal>
         <vertical bg="round-rect-panel" pad="2" pref-width="80" spacing="2" bg-color="#8a6fdf">
             <toggle-setting text="Enable scrobbling" value="scrobble-enable" apply-on-change="true"/>
+            <toggle-setting text="Enable now playing" value="now-playing-enable" apply-on-change="true"/>
             <slider-setting text="Scrobble percentage" min="50" max="100" increment="1" integer-only="true"
                             value="scrobble-percentage" apply-on-change="true"
                             hover-hint="Percentage of track duration at which track should be scrobbled"/>
         </vertical>
     </horizontal>
 
-    <horizontal anchor-pos-y="-18">
+    <horizontal anchor-pos-y="-22">
         <vertical bg="round-rect-panel" pad="2" pref-width="80" spacing="2" bg-color="#54086b">
             <button text="github" on-click="clicked-github" pref-width="20"/>
         </vertical>

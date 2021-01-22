@@ -26,7 +26,7 @@ namespace LastFmScrobblerTest
             _container.Resolve<MainConfig>().SessionKey = null;
             var client = _container.Resolve<LastFmClient>();
             client.Initialize();
-            
+
             var t = client.GetToken()!;
 
             Assert.NotNull(t);
@@ -67,7 +67,7 @@ namespace LastFmScrobblerTest
             var client = _container.Resolve<LastFmClient>();
 
             // Test non-english symbols
-            var t = client.SendScrobble("DJ Krush", "若輩", 271)!;
+            var t = client.SendScrobble("DJ Krush", "若輩", 271, DateTime.Now.ToUnixTime() - 271)!;
 
             Assert.NotNull(t);
             t!.Wait();

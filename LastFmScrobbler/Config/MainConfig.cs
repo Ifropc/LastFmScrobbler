@@ -23,7 +23,9 @@ namespace LastFmScrobbler.Config
 
         public virtual int SongScrobbleLength { get; set; } = 50;
 
-        public virtual bool ScrobbleEnabled { get; set; } = true;
+        public virtual bool ScrobbleEnabled { get; set; } = false;
+        
+        public virtual bool NowPlayingEnabled { get; set; } = true;
 
         public bool IsAuthorized()
         {

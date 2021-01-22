@@ -96,10 +96,8 @@ namespace LastFmScrobbler.Managers
         }
 
         // Return object only for testing purpose 
-        public async Task<ScrobbleResponse> SendScrobble(string artist, string track, int duration)
+        public async Task<ScrobbleResponse> SendScrobble(string artist, string track, int duration, long timestamp)
         {
-            var timestamp = DateTime.Now.ToUnixTime();
-
             var parameters = new Dictionary<string, string>
             {
                 {"method", "track.scrobble"},
