@@ -68,8 +68,7 @@ namespace LastFmScrobbler.Managers
                     {
                         await _client.SendNowPlaying(
                             _selected.songAuthorName,
-                            _selected.songName,
-                            _selected.songDuration.Seconds()
+                            _selected.songName
                         );
                     }
                 }
@@ -106,7 +105,6 @@ namespace LastFmScrobbler.Managers
                 var res = await _client.SendScrobble(
                     _selected.songAuthorName,
                     _selected.songName,
-                    _selected.songDuration.Seconds(),
                     toScrobble.StartTimestamp
                 );
 

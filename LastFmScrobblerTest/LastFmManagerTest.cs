@@ -40,7 +40,7 @@ namespace LastFmScrobblerTest
         {
             var client = _container.Resolve<LastFmClient>();
 
-            var t = client.SendNowPlaying("Yes", "Roundabout", 510)!;
+            var t = client.SendNowPlaying("Yes", "Roundabout")!;
 
             Assert.NotNull(t);
             t!.Wait();
@@ -53,7 +53,7 @@ namespace LastFmScrobblerTest
         {
             var client = _container.Resolve<LastFmClient>();
 
-            var t = client.SendNowPlaying("t+pazolite", "trick or die?", 510)!;
+            var t = client.SendNowPlaying("t+pazolite", "trick or die?")!;
 
             Assert.NotNull(t);
             t!.Wait();
@@ -67,7 +67,7 @@ namespace LastFmScrobblerTest
             var client = _container.Resolve<LastFmClient>();
 
             // Test non-english symbols
-            var t = client.SendScrobble("DJ Krush", "若輩", 271, DateTime.Now.ToUnixTime() - 271)!;
+            var t = client.SendScrobble("DJ Krush", "若輩", DateTime.Now.ToUnixTime() - 271)!;
 
             Assert.NotNull(t);
             t!.Wait();

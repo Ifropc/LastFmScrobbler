@@ -76,14 +76,13 @@ namespace LastFmScrobbler.Managers
         }
 
         // Return object only for testing purpose 
-        public async Task<object> SendNowPlaying(string artist, string track, int duration)
+        public async Task<object> SendNowPlaying(string artist, string track)
         {
             var parameters = new Dictionary<string, string>
             {
                 {"method", "track.updateNowPlaying"},
                 {"artist", artist},
                 {"track", track},
-                {"duration", duration.ToString()},
                 {"api_key", _credentials.Key},
                 {"sk", _config.SessionKey!}
             };
@@ -96,7 +95,7 @@ namespace LastFmScrobbler.Managers
         }
 
         // Return object only for testing purpose 
-        public async Task<ScrobbleResponse> SendScrobble(string artist, string track, int duration, long timestamp)
+        public async Task<ScrobbleResponse> SendScrobble(string artist, string track, long timestamp)
         {
             var parameters = new Dictionary<string, string>
             {
@@ -104,7 +103,6 @@ namespace LastFmScrobbler.Managers
                 {"artist", artist},
                 {"track", track},
                 {"timestamp", timestamp.ToString()},
-                {"duration", duration.ToString()},
                 {"api_key", _credentials.Key},
                 {"sk", _config.SessionKey!}
             };

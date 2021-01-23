@@ -20,9 +20,7 @@ new tab in your browser. Go to the browser (do not quit the game!) and allow acc
 plugin. Finally, return to the game and click `Confirm` button. 
 #### Other settings
 * **Enable**: enable/disable scrobbling
-* **Enable Now Playing**: enable/disable updating "Now playing" in your profile. 
-  Warning: in current version could lead to scrobble rejected by last fm in some cases.
-  It's recommended to disable this setting for now.
+* **Enable Now Playing**: enable/disable updating "Now playing" in your profile.
 * **Scrobble percentage**: change when track data should be submitted. With default 
   value of 50%, when you play more than half of the beatmap, new scrobble will be sent to last.fm.
   
