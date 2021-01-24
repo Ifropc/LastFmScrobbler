@@ -18,7 +18,7 @@ namespace LastFmScrobbler.UI
 
         public void Dispose()
         {
-            if (MenuButtons.IsSingletonAvailable) MenuButtons.instance.UnregisterButton(_menuButton);
+            if (MenuButtons.IsSingletonAvailable && BSMLParser.IsSingletonAvailable) MenuButtons.instance.UnregisterButton(_menuButton);
         }
 
         public void Initialize()
