@@ -21,11 +21,11 @@ namespace LastFmScrobbler.Installers
 
         private void InstallUI()
         {
-            Container.BindViewController<ScrobblerConfigView>();
-            Container.BindViewController<NotAuthorizedView>();
-            Container.BindViewController<AuthorizedView>();
-            Container.BindFlowCoordinator<ScrobblerFlowCoordinator>();
-            Container.BindInterfacesAndSelfTo<MenuButtonHandler>().AsSingle().NonLazy();
+            Container.Bind<ScrobblerConfigView>().FromNewComponentAsViewController().AsSingle();
+            Container.Bind<NotAuthorizedView>().FromNewComponentAsViewController().AsSingle();
+            Container.Bind<AuthorizedView>().FromNewComponentAsViewController().AsSingle();
+            Container.Bind<ScrobblerFlowCoordinator>().FromNewComponentOnNewGameObject(nameof(ScrobblerFlowCoordinator)).AsSingle();
+            Container.BindInterfacesAndSelfTo<MenuButtonHandler>().AsSingle();
 
             _log.Debug("Finished setting up UI");
         }
