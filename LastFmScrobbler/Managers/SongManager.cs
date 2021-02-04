@@ -1,6 +1,7 @@
 ﻿using System;
-using LastFmScrobbler.Components;
+using System.Collections.Generic;
 using LastFmScrobbler.Config;
+using SiraUtil.Interfaces;
 using SiraUtil.Tools;
 using Zenject;
 
@@ -8,54 +9,70 @@ namespace LastFmScrobbler.Managers
 {
     public class SongManager : IInitializable, IDisposable
     {
-        [Inject] private readonly LastFmClient _client = null!;
-        [Inject] private readonly MainConfig _config = null!;
-        [Inject] private readonly LevelCollectionViewController _levelCollectionViewController = null!;
         [Inject] private readonly SiraLog _log = null!;
-        [Inject] private readonly MissionSelectionMapViewController _missionSelection = null!;
-        [Inject] private readonly LastFmMenuTransitionHelper _transitionHelper = null!;
+        [Inject] private readonly MainConfig _config = null!;
+        [Inject] private readonly LastFmClient _client = null!;
+        [Inject] private readonly ILevelFinisher _levelFinisher = null!;
+        [Inject] private readonly GameScenesManager _gameScenesManager = null!;
 
-        private Action<LevelCollectionViewController, IPreviewBeatmapLevel> _eventSelectedAction = null!;
-        private IPreviewBeatmapLevel _selected = null!;
-        private CurrentSongData? _songData;
-
-        public void Dispose()
-        {
-            _transitionHelper.SongFinishedEvent += OnLevelFinished;
-            _transitionHelper.SongStartedEvent += OnLevelStarted;
-            _transitionHelper.SongSelectedEvent += OnEventSelected;
-            _missionSelection.didSelectMissionLevelEvent += OnMissionEventSelected;
-            _levelCollectionViewController.didSelectLevelEvent -= _eventSelectedAction;
-        }
+        private IPreviewBeatmapLevel _lastBeatmap;
+        private CurrentSongData _songData;
 
         public void Initialize()
         {
-            _eventSelectedAction = (_, x) => OnEventSelected(x);
-
-            _levelCollectionViewController.didSelectLevelEvent += _eventSelectedAction;
-            _missionSelection.didSelectMissionLevelEvent += OnMissionEventSelected;
-            _transitionHelper.SongSelectedEvent += OnEventSelected;
-            _transitionHelper.SongStartedEvent += OnLevelStarted;
-            _transitionHelper.SongFinishedEvent += OnLevelFinished;
+            _levelFinisher.MissionLevelFinished += MissionFinished;
+            _levelFinisher.StandardLevelFinished += StandardFinished;
+            _levelFinisher.MultiplayerLevelFinished += MultiplayerFinished;
+            _gameScenesManager.transitionDidFinishEvent += TransitionFinished;
         }
 
-        private void OnEventSelected(IPreviewBeatmapLevel beatmapPreview)
+        public void Dispose()
         {
-            _selected = beatmapPreview;
+            _levelFinisher.MissionLevelFinished -= MissionFinished;
+            _levelFinisher.StandardLevelFinished -= StandardFinished;
+            _levelFinisher.MultiplayerLevelFinished -= MultiplayerFinished;
+            _gameScenesManager.transitionDidFinishEvent -= TransitionFinished;
         }
 
-        private void OnMissionEventSelected(MissionSelectionMapViewController c, MissionNode n)
+        private void TransitionFinished(ScenesTransitionSetupDataSO _, DiContainer container)
         {
-            OnEventSelected(n.missionData.level);
+            if (container.HasBinding<IDifficultyBeatmap>())
+            {
+                var beatmap = container.Resolve<IDifficultyBeatmap>();
+                var player = container.Resolve<PlayerDataModel>();
+                OnLevelStarted(beatmap.level, player.playerData?.practiceSettings?.startSongTime ?? 0);
+            }
+        }
+
+        private void MultiplayerFinished(LevelCompletionResults results, Dictionary<string, LevelCompletionResults> _)
+        {
+            OnLevelFinished(results);
+        }
+
+        private void StandardFinished(LevelCompletionResults results)
+        {
+            OnLevelFinished(results);
+        }
+
+        private void MissionFinished(MissionCompletionResults missionResults)
+        {
+            OnLevelFinished(missionResults.levelCompletionResults);
         }
 
         // For 2 methods below check https://www.last.fm/api/scrobbling for more info
-        private async void OnLevelStarted(float offset)
+        public async void OnLevelStarted(IPreviewBeatmapLevel currentBeatmap, float offset)
         {
-            var shouldBeScrobbled = _selected.songDuration.TotalSeconds() > 30;
+            _log.Warning("STARTING LEVEL");
+            _log.Warning("STARTING LEVEL");
+            _log.Warning("STARTING LEVEL");
+            _log.Warning("STARTING LEVEL");
+            _log.Warning("STARTING LEVEL");
+
+            _lastBeatmap = currentBeatmap;
+            var shouldBeScrobbled = _lastBeatmap.songDuration.TotalSeconds() > 30;
             var time = DateTime.Now.ToUnixTime();
 
-            if (string.IsNullOrEmpty(_selected.songAuthorName))
+            if (string.IsNullOrEmpty(_lastBeatmap.songAuthorName))
             {
                 shouldBeScrobbled = false;
                 _log.Debug("Skipping song with empty author name");
@@ -67,15 +84,15 @@ namespace LastFmScrobbler.Managers
                     if (_config.NowPlayingEnabled)
                     {
                         await _client.SendNowPlaying(
-                            _selected.songAuthorName,
-                            _selected.songName
+                            _lastBeatmap.songAuthorName,
+                            _lastBeatmap.songName
                         );
                     }
                 }
                 catch (Exception e)
                 {
                     _log.Warning(
-                        $"Failed to send now playing: {_selected.songAuthorName} - {_selected.songAuthorName}");
+                        $"Failed to send now playing: {_lastBeatmap.songAuthorName} - {_lastBeatmap.songAuthorName}");
                     _log.Warning(e);
                 }
             }
@@ -95,7 +112,7 @@ namespace LastFmScrobbler.Managers
 
             _songData = null;
 
-            var notEnoughPlayed = (results.endSongTime - toScrobble.Offset) / _selected.songDuration <
+            var notEnoughPlayed = (results.endSongTime - toScrobble.Offset) / _lastBeatmap.songDuration <
                                   _config.SongScrobbleLength / 100d;
 
             if (!toScrobble.ShouldBeScrobbled || notEnoughPlayed) return;
@@ -103,8 +120,8 @@ namespace LastFmScrobbler.Managers
             try
             {
                 var res = await _client.SendScrobble(
-                    _selected.songAuthorName,
-                    _selected.songName,
+                    _lastBeatmap.songAuthorName,
+                    _lastBeatmap.songName,
                     toScrobble.StartTimestamp
                 );
 
@@ -117,7 +134,7 @@ namespace LastFmScrobbler.Managers
             }
             catch (Exception e)
             {
-                _log.Warning($"Failed to scrobble: {_selected.songAuthorName} - {_selected.songAuthorName}");
+                _log.Warning($"Failed to scrobble: {_lastBeatmap.songAuthorName} - {_lastBeatmap.songAuthorName}");
                 _log.Warning(e);
             }
         }
