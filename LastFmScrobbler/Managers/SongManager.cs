@@ -62,12 +62,6 @@ namespace LastFmScrobbler.Managers
         // For 2 methods below check https://www.last.fm/api/scrobbling for more info
         public async void OnLevelStarted(IPreviewBeatmapLevel currentBeatmap, float offset)
         {
-            _log.Warning("STARTING LEVEL");
-            _log.Warning("STARTING LEVEL");
-            _log.Warning("STARTING LEVEL");
-            _log.Warning("STARTING LEVEL");
-            _log.Warning("STARTING LEVEL");
-
             _lastBeatmap = currentBeatmap;
             var shouldBeScrobbled = _lastBeatmap.songDuration.TotalSeconds() > 30;
             var time = DateTime.Now.ToUnixTime();
