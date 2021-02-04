@@ -1,10 +1,8 @@
-﻿using LastFmScrobbler.Components;
-using LastFmScrobbler.Config;
+﻿using LastFmScrobbler.Config;
 using LastFmScrobbler.Managers;
 using LastFmScrobbler.UI;
 using SiraUtil;
 using SiraUtil.Tools;
-using UnityEngine;
 using Zenject;
 
 namespace LastFmScrobbler.Installers
@@ -34,30 +32,18 @@ namespace LastFmScrobbler.Installers
         {
             var cfg = Container.Resolve<MainConfig>();
 
-            Container.BindInterfacesAndSelfTo<CredentialsLoader>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<LinksOpener>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<LastFmClient>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<CredentialsLoader>().AsSingle();
+            Container.BindInterfacesAndSelfTo<LinksOpener>().AsSingle();
+            Container.BindInterfacesAndSelfTo<LastFmClient>().AsSingle();
 
             if (!cfg.IsAuthorized())
             {
                 _log.Warning("Client is not authorized, scrobbler is disabled.");
                 return;
             }
-
-            Rebind<MenuTransitionsHelper, LastFmMenuTransitionHelper>();
-            Container.BindInterfacesAndSelfTo<SongManager>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<SongManager>().AsSingle();
 
             _log.Info("Setup if finished.");
-        }
-
-        private void Rebind<T, R>() where T : MonoBehaviour where R : T
-        {
-            var resolved = Container.Resolve<T>();
-            var upgraded = resolved.Upgrade<T, R>();
-
-            Container.QueueForInject(upgraded);
-            Container.Unbind<T>();
-            Container.Bind(typeof(T), typeof(R)).To<R>().FromInstance(upgraded).AsSingle();
         }
     }
 }

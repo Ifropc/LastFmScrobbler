@@ -137,7 +137,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\LastFmMenuTransitionHelper.cs" />
     <Compile Include="Config\LastFmCredentials.cs" />
     <Compile Include="Config\MainConfig.cs" />
     <Compile Include="Installers\MenuInstaller.cs" />
