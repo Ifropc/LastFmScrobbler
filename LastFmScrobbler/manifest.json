@@ -3,7 +3,7 @@
   "id": "LastFmScrobbler",
   "name": "LastFmScrobbler",
   "author": "Ifropc",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Allows to scrobble played songs to last.fm",
   "gameVersion": "1.13.2",
   "dependsOn": {

@@ -15,8 +15,8 @@ namespace LastFmScrobbler.Managers
         [Inject] private readonly ILevelFinisher _levelFinisher = null!;
         [Inject] private readonly GameScenesManager _gameScenesManager = null!;
 
-        private IPreviewBeatmapLevel _lastBeatmap;
-        private CurrentSongData _songData;
+        private IPreviewBeatmapLevel? _lastBeatmap;
+        private CurrentSongData? _songData;
 
         public void Initialize()
         {
@@ -60,7 +60,7 @@ namespace LastFmScrobbler.Managers
         }
 
         // For 2 methods below check https://www.last.fm/api/scrobbling for more info
-        public async void OnLevelStarted(IPreviewBeatmapLevel currentBeatmap, float offset)
+        private async void OnLevelStarted(IPreviewBeatmapLevel currentBeatmap, float offset)
         {
             _lastBeatmap = currentBeatmap;
             var shouldBeScrobbled = _lastBeatmap.songDuration.TotalSeconds() > 30;
@@ -98,7 +98,7 @@ namespace LastFmScrobbler.Managers
         {
             var toScrobble = _songData;
 
-            if (toScrobble is null)
+            if (toScrobble is null || _lastBeatmap is null)
             {
                 _log.Warning("Unexpected null in song data");
                 return;
