@@ -2,9 +2,9 @@
 This plugin allows you to submit tracks you play in game to [last.fm](https://www.last.fm)
 
 ## Dependencies
-* BSIPA 4.1.4+
-* SiraUtil 2.4.0+
-* BeatSaberMarkupLanguage 1.4.5+
+* BSIPA 4.1.6+
+* SiraUtil 2.5.2+
+* BeatSaberMarkupLanguage 1.5.1+
 
 You can install all dependencies via ModAssistant.
 
